@@ -1,24 +1,91 @@
 from tkinter import *
 import customtkinter as ctk
 import re
+import os
+"""
+NOTES:
+     if os.path.exists('NewTraits.cs'):
+        #additional lines:
+        with open('NewTraits.cs', 'a') as f:
+                
+    else:
+        #starting code logic
+        with open('NewTraits.cs', 'a') as f:
+            f.write("using System; \n" 
+                + "using System.Threading; \n" 
+                + "using NCMS; \n" 
+                + "using UnityEngine; \n"
+                + "using ReflectionUtility; \n"
+                + "using System.Text; \n"
+                + "using System.Collections.Generic; \n"
+                + "using System.Linq; \n"
+                + "using System.Text; \n"
+                + "using ai; \n")
+
+I will probably have to add the initial and new to a string
+      that gets written to a file at teh end of create a mod that 
+      way we can make the file names based on the modname at the end
+      or we could do it this way and make a counter fo each time they 
+      click finish in order to make the file names the name concatenated with the 
+      counter but the first idea is better
+"""
 
 root = ctk.CTk(fg_color="#101519")
 root.geometry("1080x720")
 #frames add frames to have more things
 
-'''
-def myClick():
-    noSpace = ''.join(input1.get().split())
-    myctk.CTkLabel = ctk.CTkLabel(root, text=noSpace)
-    myLabel.pack()
+#CONSTANTS:
 
-myButton = Button(root, text="Pooo", command=myClick)
-myButton.pack()
-'''
-#Buttons:
-finish = ctk.CTkButton(root, text="Finish", width=80, fg_color="#fcf9ff", text_color="#101519", corner_radius=5)
+TRAIT_CODE_BEGINNING = ("using System; \n" 
+                        "using System.Threading; \n"
+                        "using NCMS; \n" 
+                        "using UnityEngine; \n"
+                        "using ReflectionUtility; \n"
+                        "using System.Text; \n"
+                        "using System.Collections.Generic; \n"
+                        "using System.Linq; \n"
+                        "using System.Text; \n"
+                        "using ai; \n"
+                        "\n"
+                        "namespace MyMod \n{"
+                        "\n"
+                        "\t class Traits \n\t{"
+                        "\n"
+                        "\t\t public static void init() \n\t\t{")
 
-#Labels:
+TRAIT_CODE_ENDING = "\n\n" + "\t\t}" + "\n" +"\n \t\t//OTHER FUNCTIONS GO HERE i.e custom death effects etc. \n" + "\n" + "\t}" + "\n" + "}" 
+
+MAIN_CODE = ("using System; \n"
+             "using NCMS; \n"
+             "using UnityEngine; \n"
+             "ReflectionUtility; \n"
+             "\n\n"
+             "namespace MyMod \n"
+             "{ \n"
+             "\t[ModEntry] \n"
+             "\tclass Main : MonoBehavior \n"
+             "\t{"
+             "\t\tvoid Awake() \n"
+             "\t\t{ \n"
+             "\t\t\tTraits.init();\n"
+             "\t\t\tEffects.init();\n"
+             "\t\t} \n"
+             "\t}\n"
+             "}"
+             )
+#BUTTON LOGIC FUNCTIONS:
+def traitCreate():
+    """
+    TESTING:
+    with open('NewTraits.cs', 'w') as f:
+        f.write(MAIN_CODE); 
+    """
+    
+
+#BUTTONS:
+traitCreate = ctk.CTkButton(root, text="Create Trait", width=100, fg_color="#fcf9ff", text_color="#101519", corner_radius=5, command=traitCreate)
+
+#LABELS:
 idLabel = ctk.CTkLabel(root, text="Trait name: ", font=ctk.CTkFont(size=15, weight="bold"), text_color="#fcf9ff")
 healthLabel = ctk.CTkLabel(root, text="Health: ", font=ctk.CTkFont(size=15, weight="bold"), text_color="#fcf9ff")
 damageLabel = ctk.CTkLabel(root, text="Damage: ", font=ctk.CTkFont(size=15, weight="bold"), text_color="#fcf9ff")
@@ -30,52 +97,57 @@ dodgeLabel = ctk.CTkLabel(root, text="Dodge Chance: ", font=ctk.CTkFont(size=15,
 intelligenceLabel = ctk.CTkLabel(root, text="Intelligence: ", font=ctk.CTkFont(size=15, weight="bold"), text_color="#fcf9ff")
 descLabel = ctk.CTkLabel(root, text="Description: ", font=ctk.CTkFont(size=15, weight="bold"), text_color="#fcf9ff")
 
-#Entry points:
+#ENTRY POINTS:
 inputTraitId = Entry(root)
-inputTraitId.insert(0, "")
+inputTraitId.insert(0, 0)
 health = Entry(root)
-health.insert(0, "")
+health.insert(0, 0)
 damage = Entry(root)
-damage.insert(0, "")
+damage.insert(0, 0)
 attackSpeed = Entry(root)
-attackSpeed.insert(0, "")
+attackSpeed.insert(0, 0)
 criticalChance = Entry(root)
-criticalChance.insert(0, "Percent as Decimal!")
+criticalChance.insert(0, 0.0)
 rangeT = Entry(root)
-rangeT.insert(0, "")
+rangeT.insert(0, 0)
 accuracy = Entry(root)
-accuracy.insert(0, "")
+accuracy.insert(0, 0)
 dodge = Entry(root)
-dodge.insert(0, "Percent as Decimal!")
+dodge.insert(0, 0.0)
 intelligence = Entry(root)
-intelligence.insert(0, "")
+intelligence.insert(0, 0)
 description = Entry(root)
-description.insert(0, "")
+description.insert(0, "This Is My First Mod!")
 
-#Formating:
-idLabel.grid(row=0, column=0, padx=2, pady=6)
-healthLabel.grid(row=1, column=0, padx=2, pady=6)
-damageLabel.grid(row=2, column=0, padx=2, pady=6)
-attackSpeedLabel.grid(row=3, column=0, padx=2, pady=6)
-critChanceLabel.grid(row=4, column=0, padx=2, pady=6)
-rangeLabel.grid(row=5, column=0, padx=2, pady=6)
-accLabel.grid(row=6, column=0, padx=2, pady=6)
-dodgeLabel.grid(row=7, column=0, padx=2, pady=6)
-intelligenceLabel.grid(row=8, column=0, padx=2, pady=6)
-descLabel.grid(row=9, column=0, padx=2, pady=6)
+#FORMATTING:
+idLabel.grid(row=0, column=0, padx=2, pady=4)
+healthLabel.grid(row=1, column=0, padx=2, pady=4)
+damageLabel.grid(row=2, column=0, padx=2, pady=4)
+attackSpeedLabel.grid(row=3, column=0, padx=2, pady=4)
+critChanceLabel.grid(row=4, column=0, padx=2, pady=4)
+rangeLabel.grid(row=5, column=0, padx=2, pady=4)
+accLabel.grid(row=6, column=0, padx=2, pady=4)
+dodgeLabel.grid(row=7, column=0, padx=2, pady=4)
+intelligenceLabel.grid(row=8, column=0, padx=2, pady=4)
+descLabel.grid(row=9, column=0, padx=2, pady=4)
 
 
-inputTraitId.grid(row=0, column=1, padx=2, pady=6)
-health.grid(row=1, column=1, padx=2, pady=6)
-damage.grid(row=2, column=1, padx=2, pady=6)
-attackSpeed.grid(row=3, column=1, padx=2, pady=6)
-criticalChance.grid(row=4, column=1, padx=2, pady=6)
-rangeT.grid(row=5, column=1, padx=2, pady=6)
-accuracy.grid(row=6, column=1, padx=2, pady=6)
-dodge.grid(row=7, column=1, padx=2, pady=6)
-intelligence.grid(row=8, column=1, padx=2, pady=6)
-description.grid(row=9, column=1, padx=2, pady=6)
+inputTraitId.grid(row=0, column=1, padx=2, pady=4)
+health.grid(row=1, column=1, padx=2, pady=4)
+damage.grid(row=2, column=1, padx=2, pady=4)
+attackSpeed.grid(row=3, column=1, padx=2, pady=4)
+criticalChance.grid(row=4, column=1, padx=2, pady=4)
+rangeT.grid(row=5, column=1, padx=2, pady=4)
+accuracy.grid(row=6, column=1, padx=2, pady=4)
+dodge.grid(row=7, column=1, padx=2, pady=4)
+intelligence.grid(row=8, column=1, padx=2, pady=4)
+description.grid(row=9, column=1, padx=2, pady=4)
 
-finish.grid(row=10, column=1, padx=1, pady=10)
+traitCreate.grid(row=10, column=1, padx=1, pady=10)
+
+
+
+
+        
 
 root.mainloop()
