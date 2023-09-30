@@ -34,6 +34,7 @@ root = ctk.CTk(fg_color="#101519")
 root.geometry("1080x720")
 #frames add frames to have more things
 
+
 #CONSTANTS:
 
 TRAIT_CODE_BEGINNING = ("using System; \n" 
@@ -74,17 +75,35 @@ MAIN_CODE = ("using System; \n"
              "}"
              )
 #BUTTON LOGIC FUNCTIONS:
+string = ''
 def traitCreate():
     """
     TESTING:
     with open('NewTraits.cs', 'w') as f:
         f.write(MAIN_CODE); 
     """
+    global string
     
+    string += ("\n\t\tActorTrait " + inputTraitId.get() + "new ActorTrait();"
+                "\n\t\t" + inputTraitId.get() + ".id" + " = " + '"' + inputTraitId.get() + '";'
+                "\n\t\t" + inputTraitId.get() + ".path_icon" + " = " + '"ui/icons/achievements/achievements_thedemon";'
+                "\n\t\t" + inputTraitId.get() + ".base_stats[S.damage] += " + damage.get() + "f;"
+                "\n\t\t" + inputTraitId.get() + ".base_stats[S.health] += " + health.get() + "f;"
+                "\n\t\t" + inputTraitId.get() + ".base_stats[S.attack_speed] += " + attackSpeed.get() + "f;"
+                "\n\t\t" + inputTraitId.get() + ".base_stats[S.critical_chance] += " + criticalChance.get() + "f;"
+                "\n\t\t" + inputTraitId.get() + ".base_stats[S.speed] += " + speed.get() + "f;"
+                "\n\t\t" + inputTraitId.get() + ".base_stats[S.dodge] += " + dodge.get() + "f;"
+                "\n\t\t" + inputTraitId.get() + ".base_stats[S.accuracy] += " + accuracy.get() + "f;"
+                "\n\t\t" + inputTraitId.get() + ".base_stats[S.range] += " + rangeT.get() + "f;"
+                "\n")
+    
+def write():
+    with open('NewTraits.cs', 'a') as f:
+            f.write(string)
 
 #BUTTONS:
 traitCreate = ctk.CTkButton(root, text="Create Trait", width=100, fg_color="#fcf9ff", text_color="#101519", corner_radius=5, command=traitCreate)
-
+write = ctk.CTkButton(root, text="Write", width=200, fg_color="#fcf9ff", text_color="#101519", corner_radius=5, command=write)
 #LABELS:
 idLabel = ctk.CTkLabel(root, text="Trait name: ", font=ctk.CTkFont(size=15, weight="bold"), text_color="#fcf9ff")
 healthLabel = ctk.CTkLabel(root, text="Health: ", font=ctk.CTkFont(size=15, weight="bold"), text_color="#fcf9ff")
@@ -93,13 +112,14 @@ attackSpeedLabel = ctk.CTkLabel(root, text="Attack Speed: ", font=ctk.CTkFont(si
 critChanceLabel = ctk.CTkLabel(root, text="Crit Chance: ", font=ctk.CTkFont(size=15, weight="bold"), text_color="#fcf9ff")
 rangeLabel = ctk.CTkLabel(root, text="Range: ", font=ctk.CTkFont(size=15, weight="bold"), text_color="#fcf9ff")
 accLabel = ctk.CTkLabel(root, text="Accuracy: ", font=ctk.CTkFont(size=15, weight="bold"), text_color="#fcf9ff")
+speedLabel = ctk.CTkLabel(root, text="Speed: ", font=ctk.CTkFont(size=15, weight="bold"), text_color="#fcf9ff")
 dodgeLabel = ctk.CTkLabel(root, text="Dodge Chance: ", font=ctk.CTkFont(size=15, weight="bold"), text_color="#fcf9ff")
 intelligenceLabel = ctk.CTkLabel(root, text="Intelligence: ", font=ctk.CTkFont(size=15, weight="bold"), text_color="#fcf9ff")
 descLabel = ctk.CTkLabel(root, text="Description: ", font=ctk.CTkFont(size=15, weight="bold"), text_color="#fcf9ff")
 
 #ENTRY POINTS:
 inputTraitId = Entry(root)
-inputTraitId.insert(0, 0)
+inputTraitId.insert(0, "randoTrait")
 health = Entry(root)
 health.insert(0, 0)
 damage = Entry(root)
@@ -112,6 +132,8 @@ rangeT = Entry(root)
 rangeT.insert(0, 0)
 accuracy = Entry(root)
 accuracy.insert(0, 0)
+speed = Entry(root)
+speed.insert(0, 0)
 dodge = Entry(root)
 dodge.insert(0, 0.0)
 intelligence = Entry(root)
@@ -127,9 +149,10 @@ attackSpeedLabel.grid(row=3, column=0, padx=2, pady=4)
 critChanceLabel.grid(row=4, column=0, padx=2, pady=4)
 rangeLabel.grid(row=5, column=0, padx=2, pady=4)
 accLabel.grid(row=6, column=0, padx=2, pady=4)
-dodgeLabel.grid(row=7, column=0, padx=2, pady=4)
-intelligenceLabel.grid(row=8, column=0, padx=2, pady=4)
-descLabel.grid(row=9, column=0, padx=2, pady=4)
+speedLabel.grid(row=7, column=0, padx=2, pady=4)
+dodgeLabel.grid(row=8, column=0, padx=2, pady=4)
+intelligenceLabel.grid(row=9, column=0, padx=2, pady=4)
+descLabel.grid(row=10, column=0, padx=2, pady=4)
 
 
 inputTraitId.grid(row=0, column=1, padx=2, pady=4)
@@ -139,11 +162,13 @@ attackSpeed.grid(row=3, column=1, padx=2, pady=4)
 criticalChance.grid(row=4, column=1, padx=2, pady=4)
 rangeT.grid(row=5, column=1, padx=2, pady=4)
 accuracy.grid(row=6, column=1, padx=2, pady=4)
-dodge.grid(row=7, column=1, padx=2, pady=4)
-intelligence.grid(row=8, column=1, padx=2, pady=4)
-description.grid(row=9, column=1, padx=2, pady=4)
+speed.grid(row=7, column=1, padx=2, pady=4)
+dodge.grid(row=8, column=1, padx=2, pady=4)
+intelligence.grid(row=9, column=1, padx=2, pady=4)
+description.grid(row=10, column=1, padx=2, pady=4)
 
-traitCreate.grid(row=10, column=1, padx=1, pady=10)
+traitCreate.grid(row=11, column=1, padx=1, pady=10)
+write.grid(row=12, column=1, padx=1, pady=10)
 
 
 
