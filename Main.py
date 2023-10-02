@@ -2,6 +2,9 @@ from tkinter import *
 import customtkinter as ctk
 import re
 import os
+import numpy as np
+import array as arr
+import string
 """
 NOTES:
      if os.path.exists('NewTraits.cs'):
@@ -76,28 +79,39 @@ MAIN_CODE = ("using System; \n"
              )
 #BUTTON LOGIC FUNCTIONS:
 string = ''
+traitsArr = []
 def traitCreate():
     """
     TESTING:
     with open('NewTraits.cs', 'w') as f:
         f.write(MAIN_CODE); 
     """
+    global traitsArr
     global string
-    
-    string += ("\n\t\tActorTrait " + inputTraitId.get() + "new ActorTrait();"
-                "\n\t\t" + inputTraitId.get() + ".id" + " = " + '"' + inputTraitId.get() + '";'
-                "\n\t\t" + inputTraitId.get() + ".path_icon" + " = " + '"ui/icons/achievements/achievements_thedemon";'
-                "\n\t\t" + inputTraitId.get() + ".base_stats[S.damage] += " + damage.get() + "f;"
-                "\n\t\t" + inputTraitId.get() + ".base_stats[S.health] += " + health.get() + "f;"
-                "\n\t\t" + inputTraitId.get() + ".base_stats[S.attack_speed] += " + attackSpeed.get() + "f;"
-                "\n\t\t" + inputTraitId.get() + ".base_stats[S.critical_chance] += " + criticalChance.get() + "f;"
-                "\n\t\t" + inputTraitId.get() + ".base_stats[S.speed] += " + speed.get() + "f;"
-                "\n\t\t" + inputTraitId.get() + ".base_stats[S.dodge] += " + dodge.get() + "f;"
-                "\n\t\t" + inputTraitId.get() + ".base_stats[S.accuracy] += " + accuracy.get() + "f;"
-                "\n\t\t" + inputTraitId.get() + ".base_stats[S.range] += " + rangeT.get() + "f;"
-                "\n\t\t" + inputTraitId.get() + ".base_stats[S.scale] += " + scale.get() + "f;"
-                "\n\t\t" + inputTraitId.get() + ".action_attack_target = new AttackAction(ActionLibrary.add" + options.get() + "OnTarget);"
-                "\n")
+    traitId = "".join(inputTraitId.get().split())
+    if traitId in traitsArr:
+         string += "\n\t\t// You tried to create a trait with the same name of " + inputTraitId.get() + " That's not possible in coding!"
+         print(traitsArr)
+    else:
+        string += ("\n\t\tActorTrait " + traitId + " = new ActorTrait();"
+                    "\n\t\t" + traitId + ".id" + " = " + '"' + inputTraitId.get() + '";'
+                    "\n\t\t" + traitId + ".path_icon" + " = " + '"ui/icons/achievements/achievements_thedemon";'
+                    "\n\t\t" + traitId + ".base_stats[S.damage] += " + damage.get() + "f;"
+                    "\n\t\t" + traitId + ".base_stats[S.health] += " + health.get() + "f;"
+                    "\n\t\t" + traitId + ".base_stats[S.attack_speed] += " + attackSpeed.get() + "f;"
+                    "\n\t\t" + traitId + ".base_stats[S.critical_chance] += " + criticalChance.get() + "f;"
+                    "\n\t\t" + traitId + ".base_stats[S.speed] += " + speed.get() + "f;"
+                    "\n\t\t" + traitId + ".base_stats[S.dodge] += " + dodge.get() + "f;"
+                    "\n\t\t" + traitId + ".base_stats[S.accuracy] += " + accuracy.get() + "f;"
+                    "\n\t\t" + traitId + ".base_stats[S.range] += " + rangeT.get() + "f;"
+                    "\n\t\t" + traitId + ".base_stats[S.scale] += " + scale.get() + "f;"
+                    "\n\t\t" + traitId + ".action_attack_target = new AttackAction(ActionLibrary.add" + options.get() + "OnTarget);"
+                    "\n\t\t" + "AssetManager.traits.add(" + traitId +");"
+                    "\n\t\t" + "PlayerConfig.unlockTrait(" + traitId +".id);"
+                    "\n\t\t" + "addTraitToLocalizedLibrary(" + traitId +".id, " + '"' + description.get() + '");'
+                    "\n")
+        traitsArr.append(traitId)
+        print(traitsArr)
     
 def write():
     with open('NewTraits.cs', 'a') as f:
@@ -142,7 +156,7 @@ dodge.insert(0, 0.0)
 intelligence = ctk.CTkEntry(root, border_color="#1D3142", fg_color="#203547", text_color="#D0D0E1")
 intelligence.insert(0, 0)
 scale = ctk.CTkEntry(root, border_color="#1D3142", fg_color="#203547", text_color="#D0D0E1")
-scale.insert(0, 0)
+scale.insert(0, 0.0)
 description = ctk.CTkEntry(root, border_color="#1D3142", fg_color="#203547", text_color="#D0D0E1")
 description.insert(0, "This Is My First Mod!")
 
