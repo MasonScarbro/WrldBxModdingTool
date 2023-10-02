@@ -95,6 +95,7 @@ def traitCreate():
                 "\n\t\t" + inputTraitId.get() + ".base_stats[S.dodge] += " + dodge.get() + "f;"
                 "\n\t\t" + inputTraitId.get() + ".base_stats[S.accuracy] += " + accuracy.get() + "f;"
                 "\n\t\t" + inputTraitId.get() + ".base_stats[S.range] += " + rangeT.get() + "f;"
+                "\n\t\t" + inputTraitId.get() + ".base_stats[S.scale] += " + scale.get() + "f;"
                 "\n\t\t" + inputTraitId.get() + ".action_attack_target = new AttackAction(ActionLibrary.add" + options.get() + "OnTarget);"
                 "\n")
     
@@ -116,6 +117,7 @@ accLabel = ctk.CTkLabel(root, text="Accuracy: ", font=ctk.CTkFont(size=15, weigh
 speedLabel = ctk.CTkLabel(root, text="Speed: ", font=ctk.CTkFont(size=15, weight="bold"), text_color="#fcf9ff")
 dodgeLabel = ctk.CTkLabel(root, text="Dodge Chance: ", font=ctk.CTkFont(size=15, weight="bold"), text_color="#fcf9ff")
 intelligenceLabel = ctk.CTkLabel(root, text="Intelligence: ", font=ctk.CTkFont(size=15, weight="bold"), text_color="#fcf9ff")
+scaleLabel = ctk.CTkLabel(root, text="Scale: ", font=ctk.CTkFont(size=15, weight="bold"), text_color="#fcf9ff")
 descLabel = ctk.CTkLabel(root, text="Description: ", font=ctk.CTkFont(size=15, weight="bold"), text_color="#fcf9ff")
 effectsLabel = ctk.CTkLabel(root, text="Attack Effects: ", font=ctk.CTkFont(size=15, weight="bold"), text_color="#fcf9ff")
 #ENTRY POINTS:
@@ -139,6 +141,8 @@ dodge = ctk.CTkEntry(root, border_color="#1D3142", fg_color="#203547", text_colo
 dodge.insert(0, 0.0)
 intelligence = ctk.CTkEntry(root, border_color="#1D3142", fg_color="#203547", text_color="#D0D0E1")
 intelligence.insert(0, 0)
+scale = ctk.CTkEntry(root, border_color="#1D3142", fg_color="#203547", text_color="#D0D0E1")
+scale.insert(0, 0)
 description = ctk.CTkEntry(root, border_color="#1D3142", fg_color="#203547", text_color="#D0D0E1")
 description.insert(0, "This Is My First Mod!")
 
@@ -165,8 +169,9 @@ accLabel.grid(row=6, column=0, padx=2, pady=4)
 speedLabel.grid(row=7, column=0, padx=2, pady=4)
 dodgeLabel.grid(row=8, column=0, padx=2, pady=4)
 intelligenceLabel.grid(row=9, column=0, padx=2, pady=4)
-effectsLabel.grid(row=10, column=0, padx=2, pady=4)
-descLabel.grid(row=11, column=0, padx=2, pady=4)
+scaleLabel.grid(row=10, column=0, padx=2, pady=4)
+effectsLabel.grid(row=11, column=0, padx=2, pady=4)
+descLabel.grid(row=12, column=0, padx=2, pady=4)
 
 
 inputTraitId.grid(row=0, column=1, padx=2, pady=4)
@@ -179,11 +184,13 @@ accuracy.grid(row=6, column=1, padx=2, pady=4)
 speed.grid(row=7, column=1, padx=2, pady=4)
 dodge.grid(row=8, column=1, padx=2, pady=4)
 intelligence.grid(row=9, column=1, padx=2, pady=4)
-dropdown.grid(row=10, column=1, padx=2, pady=4)
-description.grid(row=11, column=1, padx=2, pady=4)
+scale.grid(row=10, column=1, padx=2, pady=4)
+dropdown.grid(row=11, column=1, padx=2, pady=4)
+description.grid(row=12, column=1, padx=2, pady=4)
 
-traitCreate.grid(row=12, column=1, padx=1, pady=10)
-write.grid(row=13, column=1, padx=1, pady=10)
+
+traitCreate.grid(row=13, column=1, padx=1, pady=10)
+write.grid(row=14, column=1, padx=1, pady=10)
 
 
 
