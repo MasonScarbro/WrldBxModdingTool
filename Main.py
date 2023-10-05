@@ -9,8 +9,11 @@ import string
 
 # ROOT DECLARATION #
 root = ctk.CTk(fg_color="#101519")
-
+initialFrame = ctk.CTkFrame(root, fg_color="#101519")
+WindowsFrame = ctk.CTkFrame(root, fg_color="#101519")
 root.geometry("1290x720")
+initialFrame.grid(row=0, column=0, padx=4, pady=0)
+WindowsFrame.grid(row=0, column=1, padx=20, pady=0)
 
 
 
@@ -113,6 +116,9 @@ def traitCreate():
                     "\n\t\t" + traitId + ".base_stats[S.accuracy] += " + accuracy.get() + "f;"
                     "\n\t\t" + traitId + ".base_stats[S.range] += " + rangeT.get() + "f;"
                     "\n\t\t" + traitId + ".base_stats[S.scale] += " + scale.get() + "f;"
+                    "\n\t\t" + traitId + ".base_stats[S.intelligence] += " + intelligence.get() + "f;"
+                    "\n\t\t" + traitId + ".base_stats[S.warfare] += " + warfare.get() + "f;"
+                    "\n\t\t" + traitId + ".base_stats[S.stewardship] += " + stewardship.get() + "f;"
                     "\n\t\t" + traitId + ".action_attack_target = new AttackAction(ActionLibrary.add" + options.get() + "OnTarget);"
                     "\n\t\t" + "AssetManager.traits.add(" + traitId +");"
                     "\n\t\t" + "PlayerConfig.unlockTrait(" + traitId +".id);"
@@ -168,9 +174,9 @@ def write():
 
 # ----------------------BUTTONS ---------------------- #
 
-traitCreate = ctk.CTkButton(root, text="Create Trait", width=100, fg_color="#fcf9ff", text_color="#101519", corner_radius=5, command=traitCreate)
-effectCreate = ctk.CTkButton(root, text="Create Effect", width=100, fg_color="#fcf9ff", text_color="#101519", corner_radius=5, command=effectCreate)
-write = ctk.CTkButton(root, text="Write", width=200, fg_color="#fcf9ff", text_color="#101519", corner_radius=5, command=write)
+traitCreate = ctk.CTkButton(initialFrame, text="Create Trait", width=100, fg_color="#fcf9ff", text_color="#101519", corner_radius=5, command=traitCreate)
+effectCreate = ctk.CTkButton(initialFrame, text="Create Effect", width=100, fg_color="#fcf9ff", text_color="#101519", corner_radius=5, command=effectCreate)
+write = ctk.CTkButton(initialFrame, text="Write", width=200, fg_color="#fcf9ff", text_color="#101519", corner_radius=5, command=write)
 
 # ---------------------------------------------------------- #
 
@@ -178,7 +184,7 @@ write = ctk.CTkButton(root, text="Write", width=200, fg_color="#fcf9ff", text_co
 
 # ---------------------- LABLES ---------------------- #
 def new_label(string):
-     return ctk.CTkLabel(root, text=string, font=ctk.CTkFont(family="", size=15, weight="bold"), text_color="#fcf9ff")
+     return ctk.CTkLabel(initialFrame, text=string, font=ctk.CTkFont(family="", size=15, weight="bold"), text_color="#fcf9ff")
      
 def create_labels_traits(): 
     idLabel = new_label("Trait Name: ")
@@ -191,6 +197,8 @@ def create_labels_traits():
     speedLabel = new_label("Speed: ")
     dodgeLabel = new_label("Dodge Chance: ")
     intelligenceLabel = new_label("Intelligence: ")
+    warfareLabel = new_label("Warfare: ")
+    stewardshipLabel = new_label("Stewardship: ")
     scaleLabel = new_label("Scale: ")
     descLabel = new_label("Description: ")
     effectsLabel = new_label("Attack Effects: ")
@@ -198,6 +206,7 @@ def create_labels_traits():
     return [
     idLabel, healthLabel, damageLabel, attackSpeedLabel, critChanceLabel, 
     rangeLabel, accLabel, speedLabel, dodgeLabel, intelligenceLabel, 
+    warfareLabel, stewardshipLabel,
     scaleLabel, descLabel, effectsLabel
     ]
 
@@ -230,7 +239,7 @@ def create_labels_effects():
 # ---------------------- ENTRY POINTS ---------------------- #
 
 def new_entry():
-    return ctk.CTkEntry(root, border_color="#1D3142", fg_color="#203547", text_color="#D0D0E1")
+    return ctk.CTkEntry(initialFrame, border_color="#1D3142", fg_color="#203547", text_color="#D0D0E1")
 
 inputTraitId = new_entry()
 inputTraitId.insert(0, "randoTrait")
@@ -252,11 +261,18 @@ dodge = new_entry()
 dodge.insert(0, 0.0)
 intelligence = new_entry()
 intelligence.insert(0, 0)
+warfare = new_entry()
+warfare.insert(0, 0)
+stewardship = new_entry()
+stewardship.insert(0, 0)
 scale = new_entry()
 scale.insert(0, 0.0)
 description = new_entry()
 description.insert(0, "This Is My First Trait!")
 
+entryTraitArr = [inputTraitId, health, damage, attackSpeed, criticalChance,
+                  rangeT, accuracy, speed, dodge, intelligence, warfare, stewardship, 
+                   scale, description, ]
 
 inputEffectId = new_entry()
 inputEffectId.insert(0, "randoEffect")
@@ -304,7 +320,7 @@ OPTIONS = [
 ]
 
 options = ctk.StringVar(value="BurningEffect")
-dropdown = ctk.CTkOptionMenu(root, values=OPTIONS, variable=options, fg_color="#203547",button_color="#203547")
+dropdown = ctk.CTkOptionMenu(initialFrame, values=OPTIONS, variable=options, fg_color="#203547",button_color="#203547")
 
 # ---------------------------------------------------------- #
 
@@ -321,21 +337,18 @@ def setup_labels():
 
     for i, effect_labels in enumerate(effect_labels):
         effect_labels.grid(row=i, column=3, padx=10, pady=4)
-        
 
-inputTraitId.grid(row=0, column=1, padx=2, pady=4)
-health.grid(row=1, column=1, padx=2, pady=4)
-damage.grid(row=2, column=1, padx=2, pady=4)
-attackSpeed.grid(row=3, column=1, padx=2, pady=4)
-criticalChance.grid(row=4, column=1, padx=2, pady=4)
-rangeT.grid(row=5, column=1, padx=2, pady=4)
-accuracy.grid(row=6, column=1, padx=2, pady=4)
-speed.grid(row=7, column=1, padx=2, pady=4)
-dodge.grid(row=8, column=1, padx=2, pady=4)
-intelligence.grid(row=9, column=1, padx=2, pady=4)
-scale.grid(row=10, column=1, padx=2, pady=4)
-description.grid(row=11, column=1, padx=2, pady=4)
-dropdown.grid(row=12, column=1, padx=2, pady=4)
+def format_entries():
+     traits_entries = entryTraitArr
+
+     for i, traits_entries in enumerate(traits_entries):
+          traits_entries.grid(row=i, column=1, padx=2, pady=4)
+          length=i+1
+     dropdown.grid(row=length, column=1, padx=2, pady=4)
+     traitCreate.grid(row=length+1, column=1, padx=2, pady=4)
+            
+
+
 
 inputEffectId.grid(row=0, column=4, padx=4, pady=4)
 health_effect.grid(row=1, column=4, padx=4, pady=4)
@@ -352,12 +365,14 @@ knockback_effect.grid(row=11, column=4, padx=4, pady=4)
 knockbackR_effect.grid(row=12, column=4, padx=4, pady=4)
 description_effect.grid(row=13, column=4, padx=4, pady=4)
 
+effects_window =ctk.CTkScrollableFrame(WindowsFrame, fg_color="#203547", width=150, height=200)
+effects_window.grid(row=0, column=0, padx=10, pady=4)
 
 
-traitCreate.grid(row=13, column=1, padx=1, pady=10)
 effectCreate.grid(row=14, column=4, padx=1, pady=10)
-write.grid(row=14, column=1, padx=10, pady=20)
+write.grid(row=16, column=1, padx=10, pady=20)
 
+format_entries()
 setup_labels()
 # ---------------------------------------------------------- #
 
