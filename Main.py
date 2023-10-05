@@ -87,6 +87,8 @@ MAIN_CODE = ("using System; \n"
 
 
 # ---------------------- BUTTON COMMANDS ---------------------- #
+
+     
 trait_string = ''
 effect_string = ''
 effectsArr = []
@@ -125,6 +127,7 @@ def traitCreate():
                     "\n\t\t" + "addTraitToLocalizedLibrary(" + traitId +".id, " + '"' + description.get() + '");'
                     "\n")
         traitsArr.append(traitId)
+        add_trait_to_list(traitId)
         print(traitsArr)
 
 def effectCreate():
@@ -159,6 +162,7 @@ def effectCreate():
                     "\n\t\t" + "addTraitToLocalizedLibrary(" + effectId +".id, " + '"' + description.get() + '");'
                     "\n")
         effectsArr.append(effectId)
+        add_effect_to_list(effectId)
         print(effectsArr)
     
 def write():
@@ -232,6 +236,15 @@ def create_labels_effects():
      knockbackLabel, knockbackRLabel, descLabel,
     ]
 
+# TRAIT AND EFFECT LABEL FUCTIONS #
+def add_trait_to_list(id):
+    traitAdded = ctk.CTkLabel(traits_window, text=id, font=ctk.CTkFont(family="", size=12, weight="normal"), text_color="#fcf9ff")
+    traitAdded.pack()
+
+def add_effect_to_list(id):
+    traitAdded = ctk.CTkLabel(effects_window, text=id, font=ctk.CTkFont(family="", size=12, weight="normal"), text_color="#fcf9ff")
+    traitAdded.pack()
+
 # ---------------------------------------------------------- #
 
 
@@ -303,7 +316,14 @@ knockbackR_effect.insert(0, 0.0)
 description_effect = new_entry()
 description_effect.insert(0, "This Is My First Effect!")
 
-    
+entryEffectAr = [inputEffectId, health_effect, damage_effect, 
+                 attackSpeed_effect, criticalChance_effect,
+                 rangeE, accuracy_effect, speed_effect, dodge_effect,
+                 intelligence_effect, duration, knockback_effect, 
+                 knockbackR_effect, description_effect
+                 ]
+
+
 
 # ---------------------------------------------------------- #
 
@@ -340,40 +360,37 @@ def setup_labels():
 
 def format_entries():
      traits_entries = entryTraitArr
+     effect_entries = entryEffectAr
 
      for i, traits_entries in enumerate(traits_entries):
           traits_entries.grid(row=i, column=1, padx=2, pady=4)
           length=i+1
+    
      dropdown.grid(row=length, column=1, padx=2, pady=4)
      traitCreate.grid(row=length+1, column=1, padx=2, pady=4)
+     length=0 #reset length fopr next for loop
+
+     for i, effect_entries in enumerate(effect_entries):
+          effect_entries.grid(row=i, column=4, padx=2, pady=4)
+          length=i+1
+     effectCreate.grid(row=length, column=4, padx=2, pady=4)
             
 
-
-
-inputEffectId.grid(row=0, column=4, padx=4, pady=4)
-health_effect.grid(row=1, column=4, padx=4, pady=4)
-damage_effect.grid(row=2, column=4, padx=4, pady=4)
-attackSpeed_effect.grid(row=3, column=4, padx=4, pady=4)
-criticalChance_effect.grid(row=4, column=4, padx=4, pady=4)
-rangeE.grid(row=5, column=4, padx=4, pady=4)
-accuracy_effect.grid(row=6, column=4, padx=4, pady=4)
-speed_effect.grid(row=7, column=4, padx=4, pady=4)
-dodge_effect.grid(row=8, column=4, padx=4, pady=4)
-intelligence_effect.grid(row=9, column=4, padx=4, pady=4)
-duration.grid(row=10, column=4, padx=4, pady=4)
-knockback_effect.grid(row=11, column=4, padx=4, pady=4)
-knockbackR_effect.grid(row=12, column=4, padx=4, pady=4)
-description_effect.grid(row=13, column=4, padx=4, pady=4)
-
+#    WINDOW FORMATTING    #
+traits_window_label = ctk.CTkLabel(WindowsFrame, text="Traits Added: ", font=ctk.CTkFont(family="", size=15, weight="bold"), text_color="#fcf9ff")
+effects_window_label = ctk.CTkLabel(WindowsFrame, text="Effects Added: ", font=ctk.CTkFont(family="", size=15, weight="bold"), text_color="#fcf9ff")
+effects_window_label.grid(row=0, column=0, padx=10, pady=4)
+traits_window_label.grid(row=0, column=1, padx=10, pady=4)
 effects_window =ctk.CTkScrollableFrame(WindowsFrame, fg_color="#203547", width=150, height=200)
-effects_window.grid(row=0, column=0, padx=10, pady=4)
+effects_window.grid(row=1, column=0, padx=10, pady=4)
+traits_window =ctk.CTkScrollableFrame(WindowsFrame, fg_color="#203547", width=150, height=200)
+traits_window.grid(row=1, column=1, padx=10, pady=4)
 
 
-effectCreate.grid(row=14, column=4, padx=1, pady=10)
-write.grid(row=16, column=1, padx=10, pady=20)
+write.grid(row=16, column=1, padx=10, pady=20) #Write button only used for testing right now
 
-format_entries()
-setup_labels()
+format_entries() #called function
+setup_labels() #called function
 # ---------------------------------------------------------- #
 
 
