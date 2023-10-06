@@ -5,6 +5,8 @@ import os
 import numpy as np
 import array as arr
 import string
+from GUI import Formatting
+from Constants import Config
 
 
 # ROOT DECLARATION #
@@ -17,72 +19,6 @@ WindowsFrame.grid(row=0, column=1, padx=20, pady=0)
 
 
 
-# ---------------------- CONSTANTS ---------------------- #
-
-TRAIT_CODE_BEGINNING = ("using System; \n" 
-                        "using System.Threading; \n"
-                        "using NCMS; \n" 
-                        "using UnityEngine; \n"
-                        "using ReflectionUtility; \n"
-                        "using System.Text; \n"
-                        "using System.Collections.Generic; \n"
-                        "using System.Linq; \n"
-                        "using System.Text; \n"
-                        "using ai; \n"
-                        "\n"
-                        "namespace MyMod \n{"
-                        "\n"
-                        "\t class Traits \n\t{"
-                        "\n"
-                        "\t\t public static void init() \n\t\t{")
-
-EFFECTS_CODE_BEGINNING = TRAIT_CODE_BEGINNING.replace("Traits", "Effects")
-
-TRAIT_CODE_ENDING = ("\n\n"
-                     "\t\t}"
-                     "\n"
-                     "\n \t\t//OTHER FUNCTIONS GO HERE i.e custom death effects etc. \n"
-                     "\n"
-                     "\t\tpublic static void addTraitToLocalizedLibrary(string id, string description)"
-                     "\n\t\t{"
-                     "\n"
-                     '\n\t\t\tstring language = Reflection.GetField(LocalizedTextManager.instance.GetType(), LocalizedTextManager.instance, "language") as string;'
-                     '\n\t\t\tDictionary<string, string> localizedText = Reflection.GetField(LocalizedTextManager.instance.GetType(), LocalizedTextManager.instance, "localizedText") as Dictionary<string, string>;'
-                     '\n\t\t\tlocalizedText.Add("trait_" + id, id);'
-                     '\n\t\t\tlocalizedText.Add("trait_" + id + "_info", description);'
-                     '\n\t\t}'
-                     "\n"
-                     "\t}"
-                     "\n"
-                     "}") 
-
-
-
-EFFECTS_CODE_ENDING = (TRAIT_CODE_ENDING
-                       .replace('localizedText.Add("trait_" + id, id);', 'localizedText.Add(name, id);' )
-                       .replace('localizedText.Add("trait_" + id + "_info", description);', 'localizedText.Add(description, description);')
-                       .replace('addTraitToLocalizedLibrary(string id, string description)', 'localizeStatus(string id, string name, string description)')) 
-
-MAIN_CODE = ("using System; \n"
-             "using NCMS; \n"
-             "using UnityEngine; \n"
-             "ReflectionUtility; \n"
-             "\n\n"
-             "namespace MyMod \n"
-             "{ \n"
-             "\t[ModEntry] \n"
-             "\tclass Main : MonoBehavior \n"
-             "\t{"
-             "\t\tvoid Awake() \n"
-             "\t\t{ \n"
-             "\t\t\tTraits.init();\n"
-             "\t\t\tEffects.init();\n"
-             "\t\t} \n"
-             "\t}\n"
-             "}"
-             )
-
-# ---------------------------------------------------------- #
 
 
 
@@ -127,7 +63,7 @@ def traitCreate():
                     "\n\t\t" + "addTraitToLocalizedLibrary(" + traitId +".id, " + '"' + description.get() + '");'
                     "\n")
         traitsArr.append(traitId)
-        add_trait_to_list(traitId)
+        Formatting.add_trait_to_list(traitId, traits_window)
         print(traitsArr)
 
 def effectCreate():
@@ -162,15 +98,15 @@ def effectCreate():
                     "\n\t\t" + "addTraitToLocalizedLibrary(" + effectId +".id, " + '"' + description.get() + '");'
                     "\n")
         effectsArr.append(effectId)
-        add_effect_to_list(effectId)
+        Formatting.add_effect_to_list(effectId, effects_window)
         print(effectsArr)
     
 def write():
     with open('NewTraits.cs', 'a') as f:
-            f.write(TRAIT_CODE_BEGINNING + trait_string + TRAIT_CODE_ENDING)
+            f.write(Config.TRAIT_CODE_BEGINNING + trait_string + Config.TRAIT_CODE_ENDING)
     with open('NewEffects.cs', 'a') as f:
-            f.write(EFFECTS_CODE_BEGINNING + effect_string + EFFECTS_CODE_ENDING)
-
+            f.write(Config.EFFECTS_CODE_BEGINNING + effect_string + Config.EFFECTS_CODE_ENDING)
+effects_window, traits_window = Formatting.window_formatting(WindowsFrame)
 
 # ---------------------------------------------------------- #
 
@@ -183,70 +119,6 @@ effectCreate = ctk.CTkButton(initialFrame, text="Create Effect", width=100, fg_c
 write = ctk.CTkButton(initialFrame, text="Write", width=200, fg_color="#fcf9ff", text_color="#101519", corner_radius=5, command=write)
 
 # ---------------------------------------------------------- #
-
-
-
-# ---------------------- LABLES ---------------------- #
-def new_label(string):
-     return ctk.CTkLabel(initialFrame, text=string, font=ctk.CTkFont(family="", size=15, weight="bold"), text_color="#fcf9ff")
-     
-def create_labels_traits(): 
-    idLabel = new_label("Trait Name: ")
-    healthLabel = new_label("Health: ")
-    damageLabel = new_label("Damage: ")
-    attackSpeedLabel = new_label("Attack Speed: ")
-    critChanceLabel = new_label("Crit Chance: ")
-    rangeLabel = new_label("Range: ")
-    accLabel = new_label("Accuracy: ")
-    speedLabel = new_label("Speed: ")
-    dodgeLabel = new_label("Dodge Chance: ")
-    intelligenceLabel = new_label("Intelligence: ")
-    warfareLabel = new_label("Warfare: ")
-    stewardshipLabel = new_label("Stewardship: ")
-    scaleLabel = new_label("Scale: ")
-    descLabel = new_label("Description: ")
-    effectsLabel = new_label("Attack Effects: ")
-
-    return [
-    idLabel, healthLabel, damageLabel, attackSpeedLabel, critChanceLabel, 
-    rangeLabel, accLabel, speedLabel, dodgeLabel, intelligenceLabel, 
-    warfareLabel, stewardshipLabel,
-    scaleLabel, descLabel, effectsLabel
-    ]
-
-def create_labels_effects(): 
-    idLabel = new_label("Effect Name: ")
-    healthLabel = new_label("Health: ")
-    damageLabel = new_label("Damage: ")
-    attackSpeedLabel = new_label("Attack Speed: ")
-    critChanceLabel = new_label("Crit Chance: ")
-    rangeLabel = new_label("Range: ")
-    accLabel = new_label("Accuracy: ")
-    speedLabel = new_label("Speed: ")
-    dodgeLabel = new_label("Dodge Chance: ")
-    intelligenceLabel = new_label("Intelligence: ")
-    duration = new_label("Duration: ")
-    knockbackLabel = new_label("KnockBack")
-    knockbackRLabel = new_label("KnockBack Reduction")
-    descLabel = new_label("Description: ")
-
-    return [
-    idLabel, healthLabel, damageLabel, attackSpeedLabel, critChanceLabel, 
-    rangeLabel, accLabel, speedLabel, dodgeLabel, intelligenceLabel, duration, 
-     knockbackLabel, knockbackRLabel, descLabel,
-    ]
-
-# TRAIT AND EFFECT LABEL FUCTIONS #
-def add_trait_to_list(id):
-    traitAdded = ctk.CTkLabel(traits_window, text=id, font=ctk.CTkFont(family="", size=12, weight="normal"), text_color="#fcf9ff")
-    traitAdded.pack()
-
-def add_effect_to_list(id):
-    traitAdded = ctk.CTkLabel(effects_window, text=id, font=ctk.CTkFont(family="", size=12, weight="normal"), text_color="#fcf9ff")
-    traitAdded.pack()
-
-# ---------------------------------------------------------- #
-
 
 
 # ---------------------- ENTRY POINTS ---------------------- #
@@ -284,8 +156,8 @@ description = new_entry()
 description.insert(0, "This Is My First Trait!")
 
 entryTraitArr = [inputTraitId, health, damage, attackSpeed, criticalChance,
-                  rangeT, accuracy, speed, dodge, intelligence, warfare, stewardship, 
-                   scale, description, ]
+                rangeT, accuracy, speed, dodge, intelligence, warfare, stewardship, 
+                scale, description, ]
 
 inputEffectId = new_entry()
 inputEffectId.insert(0, "randoEffect")
@@ -317,17 +189,15 @@ description_effect = new_entry()
 description_effect.insert(0, "This Is My First Effect!")
 
 entryEffectAr = [inputEffectId, health_effect, damage_effect, 
-                 attackSpeed_effect, criticalChance_effect,
-                 rangeE, accuracy_effect, speed_effect, dodge_effect,
-                 intelligence_effect, duration, knockback_effect, 
-                 knockbackR_effect, description_effect
-                 ]
+                attackSpeed_effect, criticalChance_effect,
+                rangeE, accuracy_effect, speed_effect, dodge_effect,
+                intelligence_effect, duration, knockback_effect, 
+                knockbackR_effect, description_effect
+                ]
 
 
 
 # ---------------------------------------------------------- #
-
-
 
 # ---------------------- OPTIONS ---------------------- #
 
@@ -344,13 +214,10 @@ dropdown = ctk.CTkOptionMenu(initialFrame, values=OPTIONS, variable=options, fg_
 
 # ---------------------------------------------------------- #
 
-
-
-
 # ---------------------- FORMATTING ---------------------- #
 def setup_labels():
-    trait_labels = create_labels_traits()
-    effect_labels = create_labels_effects()
+    trait_labels = Formatting.create_labels_traits(initialFrame)
+    effect_labels = Formatting.create_labels_effects(initialFrame)
 
     for i, trait_labels in enumerate(trait_labels):
         trait_labels.grid(row=i, column=0, padx=4, pady=4)
@@ -377,14 +244,7 @@ def format_entries():
             
 
 #    WINDOW FORMATTING    #
-traits_window_label = ctk.CTkLabel(WindowsFrame, text="Traits Added: ", font=ctk.CTkFont(family="", size=15, weight="bold"), text_color="#fcf9ff")
-effects_window_label = ctk.CTkLabel(WindowsFrame, text="Effects Added: ", font=ctk.CTkFont(family="", size=15, weight="bold"), text_color="#fcf9ff")
-effects_window_label.grid(row=0, column=0, padx=10, pady=4)
-traits_window_label.grid(row=0, column=1, padx=10, pady=4)
-effects_window =ctk.CTkScrollableFrame(WindowsFrame, fg_color="#203547", width=150, height=200)
-effects_window.grid(row=1, column=0, padx=10, pady=4)
-traits_window =ctk.CTkScrollableFrame(WindowsFrame, fg_color="#203547", width=150, height=200)
-traits_window.grid(row=1, column=1, padx=10, pady=4)
+ # These Vars are called in Button Logic!
 
 
 write.grid(row=16, column=1, padx=10, pady=20) #Write button only used for testing right now
