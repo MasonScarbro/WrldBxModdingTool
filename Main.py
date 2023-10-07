@@ -57,6 +57,7 @@ def traitCreate():
                     "\n\t\t" + traitId + ".base_stats[S.intelligence] += " + intelligence.get() + "f;"
                     "\n\t\t" + traitId + ".base_stats[S.warfare] += " + warfare.get() + "f;"
                     "\n\t\t" + traitId + ".base_stats[S.stewardship] += " + stewardship.get() + "f;"
+                    "\n\t\t//" + traitId + "AttackFunction"
                     "\n\t\t" + traitId + ".action_attack_target = new AttackAction(ActionLibrary.add" + options.get() + "OnTarget);"
                     "\n\t\t" + "AssetManager.traits.add(" + traitId +");"
                     "\n\t\t" + "PlayerConfig.unlockTrait(" + traitId +".id);"
@@ -64,6 +65,7 @@ def traitCreate():
                     "\n")
         traitsArr.append(traitId)
         Formatting.add_trait_to_list(traitId, traits_window)
+        populate_options(traitsArr) #ATTACK FEATURE | WIP
         print(traitsArr)
 
 def effectCreate():
@@ -100,24 +102,37 @@ def effectCreate():
         effectsArr.append(effectId)
         Formatting.add_effect_to_list(effectId, effects_window)
         print(effectsArr)
-    
+
+# WRITING TO FILE BUTTON | TESTING #
 def write():
     with open('NewTraits.cs', 'a') as f:
             f.write(Config.TRAIT_CODE_BEGINNING + trait_string + Config.TRAIT_CODE_ENDING)
     with open('NewEffects.cs', 'a') as f:
             f.write(Config.EFFECTS_CODE_BEGINNING + effect_string + Config.EFFECTS_CODE_ENDING)
-effects_window, traits_window = Formatting.window_formatting(WindowsFrame)
+
+# BUTTON FOR ATTACK CREATION #
+def create_attack_for_trait():
+    
+    print("clicked")
+    print(options2.get())
+    global trait_string
+    trait_string = trait_string.replace("//" + options2.get() + "AttackFunction", options2.get() + ".action_attack_target = new AttackAction(" + options2.get() + "Attack);")
+                    
+    #I Know, Im Editing a constant which is evil or whatever but I did Not whant to create a new variable and or take this var out of constants its to pretty there
+    Config.TRAIT_CODE_ENDING = Config.TRAIT_CODE_ENDING.replace("//HERE GOES FUNCTIONS", "public static bool " + options2.get() + "Attack" + Config.ATTACK_ACTION_BEGGINING + Config.ATTACK_ACTION_ENDING) 
 
 # ---------------------------------------------------------- #
 
 
 
 # ----------------------BUTTONS ---------------------- #
-
-traitCreate = ctk.CTkButton(initialFrame, text="Create Trait", width=100, fg_color="#fcf9ff", text_color="#101519", corner_radius=5, command=traitCreate)
-effectCreate = ctk.CTkButton(initialFrame, text="Create Effect", width=100, fg_color="#fcf9ff", text_color="#101519", corner_radius=5, command=effectCreate)
-write = ctk.CTkButton(initialFrame, text="Write", width=200, fg_color="#fcf9ff", text_color="#101519", corner_radius=5, command=write)
-
+def new_button(string, cmd): 
+     return ctk.CTkButton(initialFrame, text=string, width=100, fg_color="#fcf9ff", text_color="#101519", corner_radius=5, command=cmd)
+     
+traitCreate = new_button("Create Trait", traitCreate)
+effectCreate = new_button("Create Effect", effectCreate)
+write = new_button("Write", write)
+attackCreate = new_button("Create Atttack", create_attack_for_trait)
 # ---------------------------------------------------------- #
 
 
@@ -210,8 +225,13 @@ OPTIONS = [
 ]
 
 options = ctk.StringVar(value="BurningEffect")
+options2 = ctk.StringVar(value="")
 dropdown = ctk.CTkOptionMenu(initialFrame, values=OPTIONS, variable=options, fg_color="#203547",button_color="#203547")
 
+# ATTACK ACTION FEATURE | WIP
+def populate_options(dynamic_options):    
+    dropdown2 = ctk.CTkOptionMenu(initialFrame, values=dynamic_options, variable=options2, fg_color="#203547",button_color="#203547")
+    dropdown2.grid(row=0, column=5, padx=2, pady=4)
 # ---------------------------------------------------------- #
 
 # ---------------------- FORMATTING ---------------------- #
@@ -244,10 +264,12 @@ def format_entries():
             
 
 #    WINDOW FORMATTING    #
- # These Vars are called in Button Logic!
+effects_window, traits_window = Formatting.window_formatting(WindowsFrame) # These Vars are called in Button Logic!
 
 
 write.grid(row=16, column=1, padx=10, pady=20) #Write button only used for testing right now
+
+attackCreate.grid(row=1, column=5, padx=2, pady=4) #ATTACK CREATION FEATURE | WIP
 
 format_entries() #called function
 setup_labels() #called function

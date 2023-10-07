@@ -23,6 +23,7 @@ class Config:
                         "\t\t}"
                         "\n"
                         "\n \t\t//OTHER FUNCTIONS GO HERE i.e custom death effects etc. \n"
+                        "\n \t\t//HERE GOES FUNCTIONS"
                         "\n"
                         "\t\tpublic static void addTraitToLocalizedLibrary(string id, string description)"
                         "\n\t\t{"
@@ -37,7 +38,11 @@ class Config:
                         "\n"
                         "}") 
 
-
+    ATTACK_ACTION_BEGGINING = ("(BaseSimObject pSelf, BaseSimObject pTarget, WorldTile pTile)"
+                               "\n"
+                               "\t\t{"
+                               )
+    ATTACK_ACTION_ENDING = "\n\n\t\t}"
 
     EFFECTS_CODE_ENDING = (TRAIT_CODE_ENDING
                         .replace('localizedText.Add("trait_" + id, id);', 'localizedText.Add(name, id);' )
