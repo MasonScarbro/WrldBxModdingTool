@@ -49,6 +49,14 @@ class Formatting:
         rangeLabel, accLabel, speedLabel, dodgeLabel, intelligenceLabel, duration, 
         knockbackLabel, knockbackRLabel, descLabel,
         ]
+    
+    def create_labels_actions(frame): 
+        idLabel = Formatting.new_label("Trait To Add: ", frame)
+        action = Formatting.new_label("Action: ", frame)
+
+        return [
+            idLabel, action
+        ]
 
     # TRAIT AND EFFECT LABEL FUCTIONS #
     def add_trait_to_list(id, frame):

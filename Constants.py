@@ -42,12 +42,57 @@ class Config:
                                "\n"
                                "\t\t{"
                                )
-    ATTACK_ACTION_ENDING = "\n\n\t\t}"
+    ATTACK_ACTION_ENDING = ("\n\n\t\t}"
+                            "\n\t\t//HERE GOES FUNCTIONS")
+    
+    #A wee bit o'code
+    ASSORTED_MAGIC_CODE = ("\n"
+                           "\t\t\tif(pTarget != null)"
+                           "\n\t\t\t{"
+                           "\n\t\t\t\tif (Toolbox.randomChance(0.2f))"
+                           "\n\t\t\t\t{"
+                           '\n\t\t\t\t\tMapBox.instance.dropManager.spawn(pTile, "fire", 4f, -1f);'
+                           '\n\t\t\t\t\tMapBox.instance.dropManager.spawn(pTile, "acid", 4f, -1f);'
+                           '\n\t\t\t\t\tMapBox.instance.dropManager.spawn(pTile, "fire", 4f, -1f);'
+                           "\n\t\t\t\t}"
+                           "\n\t\t\t\tif (Toolbox.randomChance(0.01f))"
+                           "\n\t\t\t\t{"
+                           "\n\t\t\t\t\tActionLibrary.castCurses(null, pTarget, null);"
+                           "\n\t\t\t\t}"
+                           "\n\t\t\t\tif (Toolbox.randomChance(0.01f))"
+                           "\n\t\t\t\t{"
+                           "\n\t\t\t\t\tActionLibrary.addFrozenEffectOnTarget(null, pTarget, null); //Notice how this uses pTarget"
+                           "\n\t\t\t\t}"
+                           "\n\t\t\t\tif (Toolbox.randomChance(0.05f))"
+                           "\n\t\t\t\t{"
+                           "\n\t\t\t\t\tActionLibrary.castShieldOnHimself(null, pSelf, null); //Notice how this uses pSelf"
+                           "\n\t\t\t\t}"
+                           "\n\t\t\t\tif (Toolbox.randomChance(0.04f))"
+                           "\n\t\t\t\t{"
+                           "\n\t\t\t\t\tActionLibrary.teleportRandom(null, pTarget, null);"
+                           "\n\t\t\t\t}"
+                           "\n\t\t\t\tif (Toolbox.randomChance(0.04f))"
+                           "\n\t\t\t\t{"
+                           "\n\t\t\t\t\tActionLibrary.castLightning(null, pTarget, null);"
+                           "\n\t\t\t\t}"
+                           "\n\t\t\t\tif (Toolbox.randomChance(0.004f))"
+                           "\n\t\t\t\t{"
+                           '\n\t\t\t\t\tEffectsLibrary.spawn("fx_meteorite", pTarget.currentTile, "meteorite_disaster", null, 0f, -1f, -1f); //launches a metorite on the target title the -1 is to "calculate" the position its basically like sayinng null or dont count this param'
+                           '\n\t\t\t\t\tpSelf.a.addStatusEffect("invincible", 2f); //You dont want the guy who launched this to die so yea'
+                           "\n\t\t\t\t}"
+                           "\n\t\t\t\tif (Toolbox.randomChance(0.001f))"
+                           "\n\t\t\t\t{"
+                           '\n\t\t\t\t\tEffectsLibrary.spawn("fx_fireball_explosion", pTarget.a.currentTile, null, null, 0f, -1f, -1f);'
+                           '\n\t\t\t\t\tMapAction.damageWorld(pSelf.currentTile, 2, AssetManager.terraform.get("grenade"), null);'
+                           '\n\t\t\t\t\tpSelf.a.addStatusEffect("invincible", 2f); //You dont want the guy who launched this to die so yea'
+                           "\n\t\t\t\t}"
+                           "\n\t\t\t}")
 
     EFFECTS_CODE_ENDING = (TRAIT_CODE_ENDING
                         .replace('localizedText.Add("trait_" + id, id);', 'localizedText.Add(name, id);' )
                         .replace('localizedText.Add("trait_" + id + "_info", description);', 'localizedText.Add(description, description);')
                         .replace('addTraitToLocalizedLibrary(string id, string description)', 'localizeStatus(string id, string name, string description)')) 
+    
 
     MAIN_CODE = ("using System; \n"
                 "using NCMS; \n"

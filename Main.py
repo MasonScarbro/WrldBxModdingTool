@@ -114,12 +114,18 @@ def write():
 def create_attack_for_trait():
     
     print("clicked")
-    print(options2.get())
+    print(attack_options.get())
     global trait_string
-    trait_string = trait_string.replace("//" + options2.get() + "AttackFunction", options2.get() + ".action_attack_target = new AttackAction(" + options2.get() + "Attack);")
+    
                     
     #I Know, Im Editing a constant which is evil or whatever but I did Not whant to create a new variable and or take this var out of constants its to pretty there
-    Config.TRAIT_CODE_ENDING = Config.TRAIT_CODE_ENDING.replace("//HERE GOES FUNCTIONS", "public static bool " + options2.get() + "Attack" + Config.ATTACK_ACTION_BEGGINING + Config.ATTACK_ACTION_ENDING) 
+    if attack_actions.get() == "Assorted Magic":
+        trait_string = trait_string.replace("//" + attack_options.get() + "AttackFunction", attack_options.get() + ".action_attack_target = new AttackAction(" + attack_options.get() + "Attack);")
+        Config.TRAIT_CODE_ENDING = Config.TRAIT_CODE_ENDING.replace("//HERE GOES FUNCTIONS",
+                                                                    "public static bool " + attack_options.get() + "Attack"
+                                                                    + Config.ATTACK_ACTION_BEGGINING + Config.ASSORTED_MAGIC_CODE +  Config.ATTACK_ACTION_ENDING) 
+    elif attack_actions.get() == "":
+         Config.TRAIT_CODE_ENDING = Config.TRAIT_CODE_ENDING
 
 # ---------------------------------------------------------- #
 
@@ -224,26 +230,35 @@ OPTIONS = [
 
 ]
 
-options = ctk.StringVar(value="BurningEffect")
-options2 = ctk.StringVar(value="")
-dropdown = ctk.CTkOptionMenu(initialFrame, values=OPTIONS, variable=options, fg_color="#203547",button_color="#203547")
+ACTIONS = [
+     "Assorted Magic"
+]
 
+options = ctk.StringVar(value="BurningEffect")
+attack_options = ctk.StringVar(value="")
+attack_actions = ctk.StringVar(value="")
+dropdown = ctk.CTkOptionMenu(initialFrame, values=OPTIONS, variable=options, fg_color="#203547",button_color="#203547")
+attack_action_dropdown = ctk.CTkOptionMenu(initialFrame, values=ACTIONS, variable=attack_actions, fg_color="#203547",button_color="#203547")
+attack_action_dropdown.grid(row=1, column=6, padx=2, pady=4)
 # ATTACK ACTION FEATURE | WIP
 def populate_options(dynamic_options):    
-    dropdown2 = ctk.CTkOptionMenu(initialFrame, values=dynamic_options, variable=options2, fg_color="#203547",button_color="#203547")
-    dropdown2.grid(row=0, column=5, padx=2, pady=4)
+    dropdown2 = ctk.CTkOptionMenu(initialFrame, values=dynamic_options, variable=attack_options, fg_color="#203547",button_color="#203547")
+    dropdown2.grid(row=0, column=6, padx=2, pady=4)
 # ---------------------------------------------------------- #
 
 # ---------------------- FORMATTING ---------------------- #
 def setup_labels():
     trait_labels = Formatting.create_labels_traits(initialFrame)
     effect_labels = Formatting.create_labels_effects(initialFrame)
-
+    action_labels = Formatting.create_labels_actions(initialFrame)
     for i, trait_labels in enumerate(trait_labels):
         trait_labels.grid(row=i, column=0, padx=4, pady=4)
 
     for i, effect_labels in enumerate(effect_labels):
         effect_labels.grid(row=i, column=3, padx=10, pady=4)
+
+    for i, action_labels in enumerate(action_labels):
+         action_labels.grid(row=i, column=5, padx=10, pady=4)
 
 def format_entries():
      traits_entries = entryTraitArr
@@ -269,7 +284,7 @@ effects_window, traits_window = Formatting.window_formatting(WindowsFrame) # The
 
 write.grid(row=16, column=1, padx=10, pady=20) #Write button only used for testing right now
 
-attackCreate.grid(row=1, column=5, padx=2, pady=4) #ATTACK CREATION FEATURE | WIP
+attackCreate.grid(row=2, column=6, padx=2, pady=4) #ATTACK CREATION FEATURE | WIP
 
 format_entries() #called function
 setup_labels() #called function
