@@ -45,6 +45,17 @@ class Config:
     ATTACK_ACTION_ENDING = ("\n\n\t\t}"
                             "\n\t\t//HERE GOES FUNCTIONS")
     
+    PROJECTILE_CODE_BEGINNING = (EFFECTS_CODE_BEGINNING.replace("Traits", "NewProjectiles : MonoBehavior")
+                                + "\n\t\t\tloadProjectiles();"
+                                "\n\t\t}"
+                                "\n\t\t public static void loadProjectiles() \n\t\t{") 
+    PROJECTILE_CODE_ENDING = (
+                            '\n\t\t}'
+                            "\n"
+                            "\t}"
+                            "\n"
+                            "}")
+    
     #A wee bit o'code
     ASSORTED_MAGIC_CODE = ("\n"
                            "\t\t\tif(pTarget != null)"

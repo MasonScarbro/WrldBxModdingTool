@@ -44,10 +44,22 @@ class Formatting:
         knockbackRLabel = Formatting.new_label("KnockBack Reduction", frame)
         descLabel = Formatting.new_label("Description: ", frame)
 
+
         return [
         idLabel, healthLabel, damageLabel, attackSpeedLabel, critChanceLabel, 
         rangeLabel, accLabel, speedLabel, dodgeLabel, intelligenceLabel, duration, 
         knockbackLabel, knockbackRLabel, descLabel,
+        ]
+    
+    def create_labels_projectiles(frame):
+        idLabel = Formatting.new_label("Projectile Name: ", frame)
+        speedLabel = Formatting.new_label("Speed: ", frame)
+        terraformLabel = Formatting.new_label("Terraform Range: ", frame)
+        startScaleLabel = Formatting.new_label("Start Scale: ", frame)
+        endScaleLable = Formatting.new_label("Ending Scale: ", frame)
+
+        return [
+            idLabel, speedLabel, terraformLabel, startScaleLabel, endScaleLable
         ]
     
     def create_labels_actions(frame): 
