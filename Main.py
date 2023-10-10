@@ -10,16 +10,15 @@ from Constants import Config
 from Roots import Roots
 from Entries import Entries
 from customtkinter import filedialog
-
-
-#filename = ctk.filedialog.askopenfilename(title="Select Sprite", filetypes=(("What goes here?"),()))
+import os
+from pathlib import Path
 
 
 
 
 
 # ---------------------- BUTTON COMMANDS ---------------------- #
-
+projectile_paths = []
 trait_string = ''
 effect_string = ''
 effectsArr = []
@@ -104,6 +103,7 @@ def write():
             f.write(Config.TRAIT_CODE_BEGINNING + trait_string + Config.TRAIT_CODE_ENDING)
     with open('NewEffects.cs', 'a') as f:
             f.write(Config.EFFECTS_CODE_BEGINNING + effect_string + Config.EFFECTS_CODE_ENDING)
+    print(projectile_paths)
 
 # BUTTON FOR ATTACK CREATION #
 def create_attack_for_trait():
@@ -122,6 +122,24 @@ def create_attack_for_trait():
     elif attack_actions.get() == "":
          Config.TRAIT_CODE_ENDING = Config.TRAIT_CODE_ENDING
 
+# create projectile and choose sprite might end up being the same button
+def choose_sprite():
+     filepath = ctk.filedialog.askdirectory(title="Select Sprite")
+     lastDir = re.search(r'\/([^/]+)$', filepath)
+     lastDir = lastDir.group(1)
+     print("Directory: " +  lastDir)
+     #Path(filepath).rename('\Program Files (x86)\Steam\steamapps\common\worldbox\\' +  lastDir) -- WHEN WE WRITE TO FILE LOOP THORUGH THE DIRS AND DO THIS BUT FOR PROJECTILES
+
+     # - NOTES - #
+     # we will later loop through this and change all the paths to be stoed inside projectiles
+     # before that we will loop through each path and change all files to be 0 to n where n is number of sprites
+     # as for what the texture will be named it will just be the current file path stripped done to the filename prior to it being appended
+     projectile_paths.append(lastDir)
+     
+
+     
+     
+
 # ---------------------------------------------------------- #
 
 
@@ -134,6 +152,7 @@ traitCreate = new_button("Create Trait", traitCreate)
 effectCreate = new_button("Create Effect", effectCreate)
 write = new_button("Write", write)
 attackCreate = new_button("Create Atttack", create_attack_for_trait)
+sprite = new_button("Choose Sprite", choose_sprite)
 # ---------------------------------------------------------- #
 
 
@@ -210,10 +229,12 @@ def format_entries():
           effect_entries.grid(row=i, column=4, padx=2, pady=4)
           length=i+1
      effectCreate.grid(row=length, column=4, padx=2, pady=4)
+     length=0
 
      for i, projecile_entries in enumerate(projecile_entries):
           projecile_entries.grid(row=i, column=6, padx=2, pady=4)
-
+          length=i+1
+     sprite.grid(row=length, column=6, padx=2, pady=4)
             
 
 #    WINDOW FORMATTING    #
