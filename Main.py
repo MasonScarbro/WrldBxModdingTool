@@ -21,6 +21,7 @@ from pathlib import Path
 projectile_paths = []
 trait_string = ''
 effect_string = ''
+projectile_string = ''
 effectsArr = []
 traitsArr = []
 def traitCreate():
@@ -99,11 +100,30 @@ def effectCreate():
 
 # WRITING TO FILE BUTTON | TESTING #
 def write():
-    with open('NewTraits.cs', 'a') as f:
+    program_files_path = Path(os.environ['PROGRAMFILES(X86)']) if os.name == 'nt' else Path('/usr/local') #Cross OS compatability
+    modFolder_base_path = program_files_path / "Steam" / "steamapps" / "common" / "worldbox" / "Mods" # the base path of the folder (if it exists if not we do the same thing but we create the file)
+    if modFolder_base_path.exists():
+    
+         print("Check")
+         base_path = modFolder_base_path / "myMod" #- Instead of  my mod it will just be the name of the mod
+         effects_path = base_path / "GameResources" / "effects"
+         code_path = base_path / "Code"
+         base_path.mkdir(parents=True, exist_ok=True)
+         effects_path.mkdir(parents=True, exist_ok=True)
+         code_path.mkdir(parents=True, exist_ok=True)
+         #print(code_path.exists()) --TESTING
+         
+         with open(code_path / "NewTraits.cs", 'a') as f:
             f.write(Config.TRAIT_CODE_BEGINNING + trait_string + Config.TRAIT_CODE_ENDING)
-    with open('NewEffects.cs', 'a') as f:
-            f.write(Config.EFFECTS_CODE_BEGINNING + effect_string + Config.EFFECTS_CODE_ENDING)
-    print(projectile_paths)
+         with open(code_path / "NewEffects.cs", 'a') as f:
+             f.write(Config.EFFECTS_CODE_BEGINNING + effect_string + Config.EFFECTS_CODE_ENDING)
+         with open(code_path / "NewProjectiles.cs", 'a') as f:
+             f.write(Config.PROJECTILE_CODE_BEGINNING + projectile_string + Config.PROJECTILE_CODE_ENDING)
+         print(projectile_paths)
+    else:
+        print(modFolder_base_path.exists() + modFolder_base_path)
+         
+    
 
 # BUTTON FOR ATTACK CREATION #
 def create_attack_for_trait():
@@ -124,17 +144,34 @@ def create_attack_for_trait():
 
 # create projectile and choose sprite might end up being the same button
 def choose_sprite():
-     filepath = ctk.filedialog.askdirectory(title="Select Sprite")
+     filepath = ctk.filedialog.askdirectory(title="Select Sprite") 
      lastDir = re.search(r'\/([^/]+)$', filepath)
      lastDir = lastDir.group(1)
-     print("Directory: " +  lastDir)
+     print("Directory: " +  lastDir) # Use last dir as the texture name since it will be stored in the projectiles 
      #Path(filepath).rename('\Program Files (x86)\Steam\steamapps\common\worldbox\\' +  lastDir) -- WHEN WE WRITE TO FILE LOOP THORUGH THE DIRS AND DO THIS BUT FOR PROJECTILES
+     global projectile_string
+     projectile_string += ("\n"
+                           "\t\t\tAssetManager.projectiles.add(new ProjectileAsset" 
+                           "\n\t\t\t{"
+                           "\n\t\t\t\tid = " + '"' + Entries.inputProjectileId.get() + '",'
+                           "\n\t\t\t\tspeed = " + Entries.speed_projectile.get() + "f,"
+                           "\n\t\t\t\ttexture = " + '"' + lastDir + '",'
+                           "\n\t\t\t\ttexture_shadow = " + '"' + "shadow_ball" + '",'
+                           "\n\t\t\t\tendEffect = string.Empty,"
+                           "\n\t\t\t\tterraformRange = " + Entries.terraform_range.get() + ","
+                           "\n\t\t\t\tsound_launch =" + '"event:/SFX/WEAPONS/WeaponFireballStart"' + ","
+                           "\n\t\t\t\tstartScale = " + Entries.start_scale.get() + "f,"
+                           "\n\t\t\t\ttargetScale = " + Entries.target_scale.get() + "f,"
+                           "\n\t\t\t});"
+                           "\n")
 
      # - NOTES - #
      # we will later loop through this and change all the paths to be stoed inside projectiles
      # before that we will loop through each path and change all files to be 0 to n where n is number of sprites
      # as for what the texture will be named it will just be the current file path stripped done to the filename prior to it being appended
-     projectile_paths.append(lastDir)
+     projectile_paths.append(filepath) #loop thorugh and change the file path like we did up there at the end when we write 
+     populate_options_actions(lastDir)
+     Formatting.add_trait_to_list(lastDir, projectile_window)
      
 
      
@@ -181,6 +218,11 @@ dropdown = ctk.CTkOptionMenu(Roots.initialFrame, values=OPTIONS, variable=option
 attack_action_dropdown = ctk.CTkOptionMenu(Roots.initialFrame, values=actions, variable=attack_actions, fg_color="#203547",button_color="#203547")
 attack_action_dropdown.grid(row=1, column=8, padx=2, pady=4)
 
+def populate_options_actions(sprite):
+     actions.append(sprite)
+     attack_action_dropdown = ctk.CTkOptionMenu(Roots.initialFrame, values=actions, variable=attack_actions, fg_color="#203547",button_color="#203547")
+     attack_action_dropdown.grid(row=1, column=8, padx=2, pady=4)
+     
 
 # ATTACK ACTION FEATURE | WIP
 def populate_options(dynamic_options):    
@@ -223,7 +265,7 @@ def format_entries():
             
 
 #    WINDOW FORMATTING    #
-effects_window, traits_window = Formatting.window_formatting(Roots.WindowsFrame) # These Vars are called in Button Logic!
+effects_window, traits_window, projectile_window = Formatting.window_formatting(Roots.WindowsFrame) # These Vars are called in Button Logic!
 
 
 write.grid(row=16, column=1, padx=10, pady=20) #Write button only used for testing right now

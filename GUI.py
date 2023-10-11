@@ -81,16 +81,24 @@ class Formatting:
         traitAdded = ctk.CTkLabel(frame, text=id, font=ctk.CTkFont(family="", size=12, weight="normal"), text_color="#fcf9ff")
         traitAdded.pack()
 
+    def add_projectile_to_list(id, frame):
+        traitAdded = ctk.CTkLabel(frame, text=id, font=ctk.CTkFont(family="", size=12, weight="normal"), text_color="#fcf9ff")
+        traitAdded.pack()
+
     def window_formatting(frame): 
         traits_window_label = ctk.CTkLabel(frame, text="Traits Added: ", font=ctk.CTkFont(family="", size=15, weight="bold"), text_color="#fcf9ff")
         effects_window_label = ctk.CTkLabel(frame, text="Effects Added: ", font=ctk.CTkFont(family="", size=15, weight="bold"), text_color="#fcf9ff")
+        projectile_window_label = ctk.CTkLabel(frame, text="Projectiles Added: ", font=ctk.CTkFont(family="", size=15, weight="bold"), text_color="#fcf9ff")
         effects_window_label.grid(row=0, column=0, padx=10, pady=4)
         traits_window_label.grid(row=0, column=1, padx=10, pady=4)
+        projectile_window_label.grid(row=0, column=2, padx=10, pady=4)
         effects_window =ctk.CTkScrollableFrame(frame, fg_color="#203547", width=150, height=200)
         effects_window.grid(row=1, column=0, padx=10, pady=4)
         traits_window =ctk.CTkScrollableFrame(frame, fg_color="#203547", width=150, height=200)
         traits_window.grid(row=1, column=1, padx=10, pady=4)
-        return effects_window, traits_window
+        projectile_window = ctk.CTkScrollableFrame(frame, fg_color="#203547", width=150, height=200)
+        projectile_window.grid(row=1, column=2, padx=10, pady=4)
+        return effects_window, traits_window, projectile_window
     
     def setup_labels():
         trait_labels = Formatting.create_labels_traits(Roots.initialFrame)
@@ -109,6 +117,5 @@ class Formatting:
         for i, projectile_labels in enumerate(projectile_labels):
             projectile_labels.grid(row=i, column=5, padx=10, pady=4)
 
-    effects_window, traits_window = window_formatting(Roots.WindowsFrame)
-
+   
     
