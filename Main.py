@@ -193,22 +193,7 @@ def populate_options(dynamic_options):
 # ---------------------------------------------------------- #
 
 # ---------------------- FORMATTING ---------------------- #
-def setup_labels():
-    trait_labels = Formatting.create_labels_traits(Roots.initialFrame)
-    effect_labels = Formatting.create_labels_effects(Roots.initialFrame)
-    action_labels = Formatting.create_labels_actions(Roots.initialFrame)
-    projectile_labels = Formatting.create_labels_projectiles(Roots.initialFrame)
-    for i, trait_labels in enumerate(trait_labels):
-        trait_labels.grid(row=i, column=0, padx=4, pady=4)
 
-    for i, effect_labels in enumerate(effect_labels):
-        effect_labels.grid(row=i, column=3, padx=10, pady=4)
-
-    for i, action_labels in enumerate(action_labels):
-         action_labels.grid(row=i, column=7, padx=10, pady=4)
-    
-    for i, projectile_labels in enumerate(projectile_labels):
-         projectile_labels.grid(row=i, column=5, padx=10, pady=4)
 
     
 
@@ -243,10 +228,10 @@ effects_window, traits_window = Formatting.window_formatting(Roots.WindowsFrame)
 
 write.grid(row=16, column=1, padx=10, pady=20) #Write button only used for testing right now
 
-attackCreate.grid(row=2, column=5, padx=2, pady=4) #ATTACK CREATION FEATURE | WIP
+attackCreate.grid(row=3, column=8, padx=2, pady=4) #ATTACK CREATION FEATURE | WIP
 
 format_entries() #called function
-setup_labels() #called function
+Formatting.setup_labels() #called function
 # ---------------------------------------------------------- #
 
 

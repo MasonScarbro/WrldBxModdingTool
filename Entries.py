@@ -96,4 +96,3 @@ class Entries:
     entryProjectilesArr = [
         inputProjectileId, speed_projectile, terraform_range, start_scale, target_scale, 
     ]
-    

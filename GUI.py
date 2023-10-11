@@ -1,4 +1,6 @@
 import customtkinter as ctk
+from Roots import Roots
+
 
 class Formatting:
     def new_label(string, frame):
@@ -89,6 +91,24 @@ class Formatting:
         traits_window =ctk.CTkScrollableFrame(frame, fg_color="#203547", width=150, height=200)
         traits_window.grid(row=1, column=1, padx=10, pady=4)
         return effects_window, traits_window
+    
+    def setup_labels():
+        trait_labels = Formatting.create_labels_traits(Roots.initialFrame)
+        effect_labels = Formatting.create_labels_effects(Roots.initialFrame)
+        action_labels = Formatting.create_labels_actions(Roots.initialFrame)
+        projectile_labels = Formatting.create_labels_projectiles(Roots.initialFrame)
+        for i, trait_labels in enumerate(trait_labels):
+            trait_labels.grid(row=i, column=0, padx=4, pady=4)
 
+        for i, effect_labels in enumerate(effect_labels):
+            effect_labels.grid(row=i, column=3, padx=10, pady=4)
+
+        for i, action_labels in enumerate(action_labels):
+            action_labels.grid(row=i, column=7, padx=10, pady=4)
+        
+        for i, projectile_labels in enumerate(projectile_labels):
+            projectile_labels.grid(row=i, column=5, padx=10, pady=4)
+
+    effects_window, traits_window = window_formatting(Roots.WindowsFrame)
 
     
