@@ -9,9 +9,15 @@ from GUI import Formatting
 from Constants import Config
 from Roots import Roots
 
+
 class Entries:
     def new_entry():
-        return ctk.CTkEntry(Roots.initialFrame, border_color="#1D3142", fg_color="#203547", text_color="#D0D0E1")
+        return ctk.CTkEntry(
+            Roots.initialFrame,
+            border_color="#1D3142",
+            fg_color="#203547",
+            text_color="#D0D0E1",
+        )
 
     inputTraitId = new_entry()
     inputTraitId.insert(0, "randoTrait")
@@ -42,9 +48,22 @@ class Entries:
     description = new_entry()
     description.insert(0, "This Is My First Trait!")
 
-    entryTraitArr = [inputTraitId, health, damage, attackSpeed, criticalChance,
-                    rangeT, accuracy, speed, dodge, intelligence, warfare, stewardship, 
-                    scale, description, ]
+    entryTraitArr = [
+        inputTraitId,
+        health,
+        damage,
+        attackSpeed,
+        criticalChance,
+        rangeT,
+        accuracy,
+        speed,
+        dodge,
+        intelligence,
+        warfare,
+        stewardship,
+        scale,
+        description,
+    ]
 
     inputEffectId = new_entry()
     inputEffectId.insert(0, "randoEffect")
@@ -75,13 +94,23 @@ class Entries:
     description_effect = new_entry()
     description_effect.insert(0, "This Is My First Effect!")
 
-    entryEffectAr = [inputEffectId, health_effect, damage_effect, 
-                    attackSpeed_effect, criticalChance_effect,
-                    rangeE, accuracy_effect, speed_effect, dodge_effect,
-                    intelligence_effect, duration, knockback_effect, 
-                    knockbackR_effect, description_effect
-                    ]
-    
+    entryEffectAr = [
+        inputEffectId,
+        health_effect,
+        damage_effect,
+        attackSpeed_effect,
+        criticalChance_effect,
+        rangeE,
+        accuracy_effect,
+        speed_effect,
+        dodge_effect,
+        intelligence_effect,
+        duration,
+        knockback_effect,
+        knockbackR_effect,
+        description_effect,
+    ]
+
     inputProjectileId = new_entry()
     inputProjectileId.insert(0, "ProjectileRando")
     speed_projectile = new_entry()
@@ -94,5 +123,9 @@ class Entries:
     target_scale.insert(0, 0.0)
 
     entryProjectilesArr = [
-        inputProjectileId, speed_projectile, terraform_range, start_scale, target_scale, 
+        inputProjectileId,
+        speed_projectile,
+        terraform_range,
+        start_scale,
+        target_scale,
     ]

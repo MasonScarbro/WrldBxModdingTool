@@ -102,16 +102,34 @@ def effectCreate():
 def write():
     program_files_path = Path(os.environ['PROGRAMFILES(X86)']) if os.name == 'nt' else Path('/usr/local') #Cross OS compatability
     modFolder_base_path = program_files_path / "Steam" / "steamapps" / "common" / "worldbox" / "Mods" # the base path of the folder (if it exists if not we do the same thing but we create the file)
+
+    count = 0
+    for projectile_path in projectile_paths:
+        projectile_path = Path(projectile_path)
+        for fileName in projectile_path.glob("*.png"):
+            path = fileName
+            pathBefore = re.search(r'^(.*\\)([^\\]+)$', str(path)) # Regex for everything before the png
+            pathBefore = pathBefore.group(1) 
+            #print(pathBefore) -- TESTING
+
+            path.rename(pathBefore + str(count) + ".png") #now the path rename will rename every single image to a count
+            count += 1
+
     if modFolder_base_path.exists():
     
          print("Check")
          base_path = modFolder_base_path / "myMod" #- Instead of  my mod it will just be the name of the mod
-         effects_path = base_path / "GameResources" / "effects"
+         effects_path = base_path / "GameResources" / "effects" / "projectiles"
          code_path = base_path / "Code"
          base_path.mkdir(parents=True, exist_ok=True)
          effects_path.mkdir(parents=True, exist_ok=True)
          code_path.mkdir(parents=True, exist_ok=True)
          #print(code_path.exists()) --TESTING
+         for projectile_path in projectile_paths:
+               lastDir = re.search(r'\/([^/]+)$', projectile_path)
+               lastDir = lastDir.group(1)
+               projectile_path = Path(projectile_path)
+               projectile_path.rename(effects_path / lastDir)
          
          with open(code_path / "NewTraits.cs", 'a') as f:
             f.write(Config.TRAIT_CODE_BEGINNING + trait_string + Config.TRAIT_CODE_ENDING)
@@ -142,9 +160,18 @@ def create_attack_for_trait():
     elif attack_actions.get() == "":
          Config.TRAIT_CODE_ENDING = Config.TRAIT_CODE_ENDING
 
+    else:
+        trait_string = trait_string.replace("//" + attack_options.get() + "AttackFunction", attack_options.get() + ".action_attack_target = new AttackAction(" + attack_options.get() + "Attack);")
+        Config.TRAIT_CODE_ENDING = Config.TRAIT_CODE_ENDING.replace("//HERE GOES FUNCTIONS",
+                                                                    "public static bool " + attack_options.get() + "Attack" + Config.ATTACK_ACTION_BEGGINING 
+                                                                    + Config.PROJECTILE_ACTION_BEGGINING + '\n\t\t\t\t\tEffectsLibrary.spawnProjectile(' + '"' + attack_actions.get() + '"' + ', newPoint, newPoint2, 0.0f);' +  Config.PROJECTILE_ACTION_ENDING + Config.ATTACK_ACTION_ENDING)
+        
+
 # create projectile and choose sprite might end up being the same button
 def choose_sprite():
-     filepath = ctk.filedialog.askdirectory(title="Select Sprite") 
+     
+     filepath = ctk.filedialog.askdirectory(title="Select Sprite")
+
      lastDir = re.search(r'\/([^/]+)$', filepath)
      lastDir = lastDir.group(1)
      print("Directory: " +  lastDir) # Use last dir as the texture name since it will be stored in the projectiles 
@@ -170,8 +197,8 @@ def choose_sprite():
      # before that we will loop through each path and change all files to be 0 to n where n is number of sprites
      # as for what the texture will be named it will just be the current file path stripped done to the filename prior to it being appended
      projectile_paths.append(filepath) #loop thorugh and change the file path like we did up there at the end when we write 
-     populate_options_actions(lastDir)
-     Formatting.add_trait_to_list(lastDir, projectile_window)
+     populate_options_actions(Entries.inputProjectileId.get())
+     Formatting.add_trait_to_list(Entries.inputProjectileId.get(), projectile_window)
      
 
      
