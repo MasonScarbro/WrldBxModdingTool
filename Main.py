@@ -103,17 +103,19 @@ def write():
     program_files_path = Path(os.environ['PROGRAMFILES(X86)']) if os.name == 'nt' else Path('/usr/local') #Cross OS compatability
     modFolder_base_path = program_files_path / "Steam" / "steamapps" / "common" / "worldbox" / "Mods" # the base path of the folder (if it exists if not we do the same thing but we create the file)
 
-    count = 0
-    for projectile_path in projectile_paths:
-        projectile_path = Path(projectile_path)
-        for fileName in projectile_path.glob("*.png"):
-            path = fileName
-            pathBefore = re.search(r'^(.*\\)([^\\]+)$', str(path)) # Regex for everything before the png
-            pathBefore = pathBefore.group(1) 
-            #print(pathBefore) -- TESTING
 
-            path.rename(pathBefore + str(count) + ".png") #now the path rename will rename every single image to a count
-            count += 1
+    count = 0
+    if projectile_paths:
+     for projectile_path in projectile_paths:
+          projectile_path = Path(projectile_path)
+          for fileName in projectile_path.glob("*.png"):
+               path = fileName
+               pathBefore = re.search(r'^(.*\\)([^\\]+)$', str(path)) # Regex for everything before the png
+               pathBefore = pathBefore.group(1) 
+               #print(pathBefore) -- TESTING
+
+               path.rename(pathBefore + str(count) + ".png") #now the path rename will rename every single image to a count
+               count += 1
 
     if modFolder_base_path.exists():
     
@@ -125,11 +127,13 @@ def write():
          effects_path.mkdir(parents=True, exist_ok=True)
          code_path.mkdir(parents=True, exist_ok=True)
          #print(code_path.exists()) --TESTING
-         for projectile_path in projectile_paths:
-               lastDir = re.search(r'\/([^/]+)$', projectile_path)
-               lastDir = lastDir.group(1)
-               projectile_path = Path(projectile_path)
-               projectile_path.rename(effects_path / lastDir)
+         
+         if projectile_paths:
+          for projectile_path in projectile_paths:
+                    lastDir = re.search(r'\/([^/]+)$', projectile_path)
+                    lastDir = lastDir.group(1)
+                    projectile_path = Path(projectile_path)
+                    projectile_path.rename(effects_path / lastDir)
          
          with open(code_path / "NewTraits.cs", 'a') as f:
             f.write(Config.TRAIT_CODE_BEGINNING + trait_string + Config.TRAIT_CODE_ENDING)
@@ -138,6 +142,7 @@ def write():
          with open(code_path / "NewProjectiles.cs", 'a') as f:
              f.write(Config.PROJECTILE_CODE_BEGINNING + projectile_string + Config.PROJECTILE_CODE_ENDING)
          print(projectile_paths)
+         Roots.loading_window()
     else:
         print(modFolder_base_path.exists() + modFolder_base_path)
          
@@ -214,7 +219,7 @@ def new_button(string, cmd):
      
 traitCreate = new_button("Create Trait", traitCreate)
 effectCreate = new_button("Create Effect", effectCreate)
-write = new_button("Write", write)
+write = ctk.CTkButton(Roots.writeButtonFrame, text="Create Mod", width=100, fg_color="#fcf9ff", text_color="#101519", corner_radius=5, command=write)
 attackCreate = new_button("Create Atttack", create_attack_for_trait)
 sprite = new_button("Choose Sprite", choose_sprite)
 # ---------------------------------------------------------- #
@@ -295,7 +300,7 @@ def format_entries():
 effects_window, traits_window, projectile_window = Formatting.window_formatting(Roots.WindowsFrame) # These Vars are called in Button Logic!
 
 
-write.grid(row=16, column=1, padx=10, pady=20) #Write button only used for testing right now
+write.grid(row=1, column=1, padx=10, pady=20) #Write button only used for testing right now
 
 attackCreate.grid(row=3, column=8, padx=2, pady=4) #ATTACK CREATION FEATURE | WIP
 
