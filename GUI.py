@@ -174,3 +174,5 @@ class Formatting:
 
         for i, projectile_labels in enumerate(projectile_labels):
             projectile_labels.grid(row=i, column=5, padx=10, pady=4)
+
+    

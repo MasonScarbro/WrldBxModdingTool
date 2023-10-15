@@ -129,3 +129,12 @@ class Entries:
         start_scale,
         target_scale,
     ]
+
+    modName = ctk.CTkEntry(
+            Roots.writeButtonFrame,
+            border_color="#1D3142",
+            fg_color="#203547",
+            text_color="#D0D0E1",
+        )
+    modName.insert(0, "NameOfTheMod")
+    modName.grid(row=1, column=1, padx=10, pady=20)

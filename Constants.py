@@ -44,11 +44,28 @@ class Config:
     ATTACK_ACTION_BEGGINING = (
         "(BaseSimObject pSelf, BaseSimObject pTarget, WorldTile pTile)" "\n" "\t\t{"
     )
-    ATTACK_ACTION_ENDING = "\n\n\t\t}" "\n\t\t//HERE GOES FUNCTIONS"
+    ATTACK_ACTION_ENDING = ("\n\t\t\treturn false;"
+                            "\n\t\t}" 
+                            "\n\t\t//HERE GOES FUNCTIONS")
 
     PROJECTILE_CODE_BEGINNING = (
-        EFFECTS_CODE_BEGINNING.replace("Traits", "NewProjectiles : MonoBehavior")
-        + "\n\t\t\tloadProjectiles();"
+        "using System; \n"
+        "using System.Threading; \n"
+        "using NCMS; \n"
+        "using UnityEngine; \n"
+        "using ReflectionUtility; \n"
+        "using System.Text; \n"
+        "using System.Collections.Generic; \n"
+        "using System.Linq; \n"
+        "using System.Text; \n"
+        "using ai; \n"
+        "\n"
+        "namespace MyMod \n{"
+        "\n"
+        "\t class NewProjectiles : MonoBehaviour \n\t{"
+        "\n"
+        "\t\t public static void init() \n\t\t{"
+        "\n\t\t\tloadProjectiles();"
         "\n\t\t}"
         "\n\t\t public static void loadProjectiles() \n\t\t{"
     )
@@ -59,6 +76,7 @@ class Config:
         "\n"
         "\t\t\tif(pTarget != null)"
         "\n\t\t\t{"
+        '\n\t\t\t\tActor a = Reflection.GetField(pTarget.GetType(), pTarget, "a") as Actor;'
         "\n\t\t\t\tif (Toolbox.randomChance(0.2f))"
         "\n\t\t\t\t{"
         '\n\t\t\t\t\tMapBox.instance.dropManager.spawn(pTile, "fire", 4f, -1f);'
@@ -92,10 +110,11 @@ class Config:
         "\n\t\t\t\t}"
         "\n\t\t\t\tif (Toolbox.randomChance(0.001f))"
         "\n\t\t\t\t{"
-        '\n\t\t\t\t\tEffectsLibrary.spawn("fx_fireball_explosion", pTarget.a.currentTile, null, null, 0f, -1f, -1f);'
+        '\n\t\t\t\t\tEffectsLibrary.spawn("fx_fireball_explosion", pTarget.currentTile, null, null, 0f, -1f, -1f);'
         '\n\t\t\t\t\tMapAction.damageWorld(pSelf.currentTile, 2, AssetManager.terraform.get("grenade"), null);'
         '\n\t\t\t\t\tpSelf.a.addStatusEffect("invincible", 2f); //You dont want the guy who launched this to die so yea'
         "\n\t\t\t\t}"
+        "\n\t\t\t\treturn true;"
         "\n\t\t\t}"
     )
 
@@ -103,6 +122,7 @@ class Config:
         "\n"
         "\t\t\tif(pTarget != null)"
         "\n\t\t\t{"
+        '\n\t\t\t\tActor a = Reflection.GetField(pTarget.GetType(), pTarget, "a") as Actor;'
         "\n\t\t\t\tif (Toolbox.randomChance(0.2f))"
         "\n\t\t\t\t{"
         "\n\t\t\t\t\tVector2Int pos = pTile.pos; // Position of the Ptile as a Vector 2"
@@ -111,7 +131,9 @@ class Config:
         "\n\t\t\t\t\tVector3 newPoint2 = Toolbox.getNewPoint(pTarget.currentPosition.x, pTarget.currentPosition.y, (float)pos.x, (float)pos.y, pTarget.a.stats[S.size], true);"
     )
 
-    PROJECTILE_ACTION_ENDING = "\n\t\t\t\t}"
+    PROJECTILE_ACTION_ENDING = ("\n\t\t}"
+                                "\n\t\t\treturn true;"
+                                "\n\t\t\t}")
 
     EFFECTS_CODE_ENDING = (
         TRAIT_CODE_ENDING.replace(
@@ -131,7 +153,7 @@ class Config:
         "using System; \n"
         "using NCMS; \n"
         "using UnityEngine; \n"
-        "ReflectionUtility; \n"
+        "using ReflectionUtility; \n"
         "\n\n"
         "namespace MyMod \n"
         "{ \n"
@@ -142,6 +164,7 @@ class Config:
         "\t\t{ \n"
         "\t\t\tTraits.init();\n"
         "\t\t\tEffects.init();\n"
+        "\t\t\tNewProjectiles.init();\n"
         "\t\t} \n"
         "\t}\n"
         "}"

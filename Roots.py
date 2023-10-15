@@ -24,7 +24,7 @@ class Roots:
         label = ctk.CTkLabel(loading, text="Creating Mod...", font=("Arial", 12))
         label.pack(pady=10)
 
-        progressbar = ctk.CTkProgressBar(loading, mode='determinate')
+        progressbar = ctk.CTkProgressBar(loading, mode="determinate")
         progressbar.pack(pady=10)
         progressbar.start()  # Start the progress bar animation
 
@@ -40,6 +40,3 @@ class Roots:
             Roots.close_root()  # Close the main application
 
         loading.after(100, simulate_task)
-
-
-

@@ -90,9 +90,10 @@ def effectCreate():
                     "\n\t\t" + effectId + ".base_stats[S.knockback_reduction] += " + Entries.knockbackR_effect.get() + "f;"
                     "\n\t\t" + effectId + ".base_stats[S.knockback] += " + Entries.knockback_effect.get() + "f;"
                     "\n\t\t" + effectId + ".path_icon" + " = " + '"ui/icons/achievements/achievements_thedemon";'
+                    "\n\t\t" + effectId + ".description = " + '"' + Entries.description.get() + '";'
                     "\n\t\t" + effectId + ".name = " + '"status_title_' + effectId + '";'
                     "\n\t\t" + "AssetManager.status.add(" + effectId +");"
-                    "\n\t\t" + "addTraitToLocalizedLibrary(" + effectId +".id, " + '"' + Entries.description.get() + '");'
+                    "\n\t\t" + "localizeStatus(" + effectId + ".id, " + '"' +effectId + '", ' + effectId + ".description" + ');'
                     "\n")
         effectsArr.append(effectId)
         Formatting.add_effect_to_list(effectId, effects_window)
@@ -120,7 +121,7 @@ def write():
     if modFolder_base_path.exists():
     
          print("Check")
-         base_path = modFolder_base_path / "myMod" #- Instead of  my mod it will just be the name of the mod
+         base_path = modFolder_base_path / Entries.modName.get() #- Instead of  my mod it will just be the name of the mod
          effects_path = base_path / "GameResources" / "effects" / "projectiles"
          code_path = base_path / "Code"
          base_path.mkdir(parents=True, exist_ok=True)
@@ -134,7 +135,15 @@ def write():
                     lastDir = lastDir.group(1)
                     projectile_path = Path(projectile_path)
                     projectile_path.rename(effects_path / lastDir)
-         
+
+         Config.TRAIT_CODE_BEGINNING = Config.TRAIT_CODE_BEGINNING.replace("MyMod", Entries.modName.get())
+         Config.EFFECTS_CODE_BEGINNING = Config.EFFECTS_CODE_BEGINNING.replace("MyMod", Entries.modName.get())
+         Config.PROJECTILE_CODE_BEGINNING = Config.PROJECTILE_CODE_BEGINNING.replace("MyMod", Entries.modName.get())
+         Config.MAIN_CODE = Config.MAIN_CODE.replace("MyMod", Entries.modName.get())
+
+         write_to_json(base_path)
+         with open(code_path / "Main.cs", 'a') as f:
+            f.write(Config.MAIN_CODE)
          with open(code_path / "NewTraits.cs", 'a') as f:
             f.write(Config.TRAIT_CODE_BEGINNING + trait_string + Config.TRAIT_CODE_ENDING)
          with open(code_path / "NewEffects.cs", 'a') as f:
@@ -206,7 +215,19 @@ def choose_sprite():
      Formatting.add_trait_to_list(Entries.inputProjectileId.get(), projectile_window)
      
 
-     
+def write_to_json(base_path):
+    
+    json = ('{\n'
+  '\n"name":' + '"' + Entries.modName.get() + '",'
+  '\n"author": "MasonScarbro",'
+  '\n"version": "0.0.1",'
+  '\n"description": "My First Mod!",'
+  '\n"targetGameBuild": 558,'
+  '\n"iconPath": "icon.png"'
+'\n}')
+    with open(base_path / "mod.json", 'a') as f:
+            f.write(json)
+    
      
 
 # ---------------------------------------------------------- #
@@ -300,7 +321,7 @@ def format_entries():
 effects_window, traits_window, projectile_window = Formatting.window_formatting(Roots.WindowsFrame) # These Vars are called in Button Logic!
 
 
-write.grid(row=1, column=1, padx=10, pady=20) #Write button only used for testing right now
+write.grid(row=2, column=1, padx=10, pady=20) #Write button only used for testing right now
 
 attackCreate.grid(row=3, column=8, padx=2, pady=4) #ATTACK CREATION FEATURE | WIP
 
