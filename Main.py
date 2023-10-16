@@ -12,6 +12,7 @@ from Entries import Entries
 from customtkinter import filedialog
 import os
 from pathlib import Path
+import shutil
 
 
 
@@ -103,7 +104,7 @@ def effectCreate():
 def write():
     program_files_path = Path(os.environ['PROGRAMFILES(X86)']) if os.name == 'nt' else Path('/usr/local') #Cross OS compatability
     modFolder_base_path = program_files_path / "Steam" / "steamapps" / "common" / "worldbox" / "Mods" # the base path of the folder (if it exists if not we do the same thing but we create the file)
-
+    assembly_file_path = program_files_path / "Steam" / "steamapps" / "common" / "worldbox" / "worldbox_Data" / "Managed" / "Assembly-CSharp.dll"
 
     count = 0
     if projectile_paths:
@@ -124,9 +125,11 @@ def write():
          base_path = modFolder_base_path / Entries.modName.get() #- Instead of  my mod it will just be the name of the mod
          effects_path = base_path / "GameResources" / "effects" / "projectiles"
          code_path = base_path / "Code"
+         assembly_path = base_path / "Assemblies"
          base_path.mkdir(parents=True, exist_ok=True)
          effects_path.mkdir(parents=True, exist_ok=True)
          code_path.mkdir(parents=True, exist_ok=True)
+         assembly_path.mkdir(parents=True, exist_ok=True)
          #print(code_path.exists()) --TESTING
          
          if projectile_paths:
@@ -142,6 +145,7 @@ def write():
          Config.MAIN_CODE = Config.MAIN_CODE.replace("MyMod", Entries.modName.get())
 
          write_to_json(base_path)
+         shutil.copy2(assembly_file_path, assembly_path)
          with open(code_path / "Main.cs", 'a') as f:
             f.write(Config.MAIN_CODE)
          with open(code_path / "NewTraits.cs", 'a') as f:
@@ -219,7 +223,7 @@ def write_to_json(base_path):
     
     json = ('{\n'
   '\n"name":' + '"' + Entries.modName.get() + '",'
-  '\n"author": "MasonScarbro",'
+  '\n"author": "Mason Scarbro",'
   '\n"version": "0.0.1",'
   '\n"description": "My First Mod!",'
   '\n"targetGameBuild": 558,'
