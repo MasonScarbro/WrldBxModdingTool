@@ -54,7 +54,6 @@ def traitCreate():
                     "\n\t\t" + traitId + ".base_stats[S.warfare] += " + Entries.warfare.get() + "f;"
                     "\n\t\t" + traitId + ".base_stats[S.stewardship] += " + Entries.stewardship.get() + "f;"
                     "\n\t\t//" + traitId + "AttackFunction"
-                    "\n\t\t" + traitId + ".action_attack_target = new AttackAction(ActionLibrary.add" + Options.options.get() + "OnTarget);"
                     "\n\t\t" + "AssetManager.traits.add(" + traitId +");"
                     "\n\t\t" + "PlayerConfig.unlockTrait(" + traitId +".id);"
                     "\n\t\t" + "addTraitToLocalizedLibrary(" + traitId +".id, " + '"' + Entries.description.get() + '");'
@@ -106,7 +105,7 @@ def write():
     modFolder_base_path = program_files_path / "Steam" / "steamapps" / "common" / "worldbox" / "Mods" # the base path of the folder (if it exists if not we do the same thing but we create the file)
     assembly_file_path = program_files_path / "Steam" / "steamapps" / "common" / "worldbox" / "worldbox_Data" / "Managed" / "Assembly-CSharp.dll"
 
-    count = 0
+    count = 1
     if projectile_paths:
      for projectile_path in projectile_paths:
           projectile_path = Path(projectile_path)
@@ -175,15 +174,21 @@ def create_attack_for_trait():
         Config.TRAIT_CODE_ENDING = Config.TRAIT_CODE_ENDING.replace("//HERE GOES FUNCTIONS",
                                                                     "public static bool " + Options.attack_options.get() + "Attack"
                                                                     + Config.ATTACK_ACTION_BEGGINING + Config.ASSORTED_MAGIC_CODE +  Config.ATTACK_ACTION_ENDING) 
-    elif Options.attack_actions.get() == "":
-         Config.TRAIT_CODE_ENDING = Config.TRAIT_CODE_ENDING
+        traitsArr.remove(Options.attack_options.get())
+        Options.populate_options(traitsArr)
+        
+    elif Options.attack_actions.get() in ["BurningEffect", "SlowEffect", "FrozenEffect", "PoisonedEffect"]:
+        trait_string = trait_string.replace("//" + Options.attack_options.get() + "AttackFunction", Options.attack_options.get() + ".action_attack_target = new AttackAction(ActionLibrary.add" + Options.attack_actions.get() + "OnTarget);")
+        traitsArr.remove(Options.attack_options.get())
+        Options.populate_options(traitsArr)
 
     else:
         trait_string = trait_string.replace("//" + Options.attack_options.get() + "AttackFunction", Options.attack_options.get() + ".action_attack_target = new AttackAction(" + Options.attack_options.get() + "Attack);")
         Config.TRAIT_CODE_ENDING = Config.TRAIT_CODE_ENDING.replace("//HERE GOES FUNCTIONS",
                                                                     "public static bool " + Options.attack_options.get() + "Attack" + Config.ATTACK_ACTION_BEGGINING 
                                                                     + Config.PROJECTILE_ACTION_BEGGINING + '\n\t\t\t\t\tEffectsLibrary.spawnProjectile(' + '"' + Options.attack_actions.get() + '"' + ', newPoint, newPoint2, 0.0f);' +  Config.PROJECTILE_ACTION_ENDING + Config.ATTACK_ACTION_ENDING)
-        
+        traitsArr.remove(Options.attack_options.get())
+        Options.populate_options(traitsArr)
 
 # create projectile and choose sprite might end up being the same button
 def choose_sprite():
@@ -278,8 +283,8 @@ def format_entries():
           traits_entries.grid(row=i, column=1, padx=2, pady=4)
           length=i+1
     
-     Options.dropdown.grid(row=length, column=1, padx=2, pady=4)
-     traitCreate.grid(row=length+1, column=1, padx=2, pady=4)
+     
+     traitCreate.grid(row=length, column=1, padx=2, pady=4)
      length=0 #reset length fopr next for loop
 
      for i, effect_entries in enumerate(effect_entries):

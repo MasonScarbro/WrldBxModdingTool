@@ -86,7 +86,7 @@ class Formatting:
         startScaleLabel = Formatting.new_label("Start Scale: ", frame)
         endScaleLable = Formatting.new_label("Ending Scale: ", frame)
         loopedLabel = Formatting.new_label("Looped (sprite): ", frame)
-        lookAtTargetLabel = Formatting.new_label("Rotate (y-axis): ", frame)
+        lookAtTargetLabel = Formatting.new_label("Look At Target: ", frame)
 
         return [idLabel, speedLabel, terraformLabel, startScaleLabel, endScaleLable, loopedLabel, lookAtTargetLabel]
 
