@@ -13,7 +13,7 @@ from customtkinter import filedialog
 import os
 from pathlib import Path
 import shutil
-
+from Options import Options
 
 
 
@@ -54,14 +54,14 @@ def traitCreate():
                     "\n\t\t" + traitId + ".base_stats[S.warfare] += " + Entries.warfare.get() + "f;"
                     "\n\t\t" + traitId + ".base_stats[S.stewardship] += " + Entries.stewardship.get() + "f;"
                     "\n\t\t//" + traitId + "AttackFunction"
-                    "\n\t\t" + traitId + ".action_attack_target = new AttackAction(ActionLibrary.add" + options.get() + "OnTarget);"
+                    "\n\t\t" + traitId + ".action_attack_target = new AttackAction(ActionLibrary.add" + Options.options.get() + "OnTarget);"
                     "\n\t\t" + "AssetManager.traits.add(" + traitId +");"
                     "\n\t\t" + "PlayerConfig.unlockTrait(" + traitId +".id);"
                     "\n\t\t" + "addTraitToLocalizedLibrary(" + traitId +".id, " + '"' + Entries.description.get() + '");'
                     "\n")
         traitsArr.append(traitId)
         Formatting.add_trait_to_list(traitId, traits_window)
-        populate_options(traitsArr) #ATTACK FEATURE | WIP
+        Options.populate_options(traitsArr) #ATTACK FEATURE | WIP
         print(traitsArr)
 
 def effectCreate():
@@ -165,24 +165,24 @@ def write():
 def create_attack_for_trait():
     
     print("clicked")
-    print(attack_options.get())
+    print(Options.attack_options.get())
     global trait_string
     
                     
     #I Know, Im Editing a constant which is evil or whatever but I did Not whant to create a new variable and or take this var out of constants its to pretty there
-    if attack_actions.get() == "Assorted Magic":
-        trait_string = trait_string.replace("//" + attack_options.get() + "AttackFunction", attack_options.get() + ".action_attack_target = new AttackAction(" + attack_options.get() + "Attack);")
+    if Options.attack_actions.get() == "Assorted Magic":
+        trait_string = trait_string.replace("//" + Options.attack_options.get() + "AttackFunction", Options.attack_options.get() + ".action_attack_target = new AttackAction(" + Options.attack_options.get() + "Attack);")
         Config.TRAIT_CODE_ENDING = Config.TRAIT_CODE_ENDING.replace("//HERE GOES FUNCTIONS",
-                                                                    "public static bool " + attack_options.get() + "Attack"
+                                                                    "public static bool " + Options.attack_options.get() + "Attack"
                                                                     + Config.ATTACK_ACTION_BEGGINING + Config.ASSORTED_MAGIC_CODE +  Config.ATTACK_ACTION_ENDING) 
-    elif attack_actions.get() == "":
+    elif Options.attack_actions.get() == "":
          Config.TRAIT_CODE_ENDING = Config.TRAIT_CODE_ENDING
 
     else:
-        trait_string = trait_string.replace("//" + attack_options.get() + "AttackFunction", attack_options.get() + ".action_attack_target = new AttackAction(" + attack_options.get() + "Attack);")
+        trait_string = trait_string.replace("//" + Options.attack_options.get() + "AttackFunction", Options.attack_options.get() + ".action_attack_target = new AttackAction(" + Options.attack_options.get() + "Attack);")
         Config.TRAIT_CODE_ENDING = Config.TRAIT_CODE_ENDING.replace("//HERE GOES FUNCTIONS",
-                                                                    "public static bool " + attack_options.get() + "Attack" + Config.ATTACK_ACTION_BEGGINING 
-                                                                    + Config.PROJECTILE_ACTION_BEGGINING + '\n\t\t\t\t\tEffectsLibrary.spawnProjectile(' + '"' + attack_actions.get() + '"' + ', newPoint, newPoint2, 0.0f);' +  Config.PROJECTILE_ACTION_ENDING + Config.ATTACK_ACTION_ENDING)
+                                                                    "public static bool " + Options.attack_options.get() + "Attack" + Config.ATTACK_ACTION_BEGGINING 
+                                                                    + Config.PROJECTILE_ACTION_BEGGINING + '\n\t\t\t\t\tEffectsLibrary.spawnProjectile(' + '"' + Options.attack_actions.get() + '"' + ', newPoint, newPoint2, 0.0f);' +  Config.PROJECTILE_ACTION_ENDING + Config.ATTACK_ACTION_ENDING)
         
 
 # create projectile and choose sprite might end up being the same button
@@ -204,6 +204,10 @@ def choose_sprite():
                            "\n\t\t\t\ttexture_shadow = " + '"' + "shadow_ball" + '",'
                            "\n\t\t\t\tendEffect = string.Empty,"
                            "\n\t\t\t\tterraformRange = " + Entries.terraform_range.get() + ","
+                           "\n\t\t\t\tdraw_light_area = true,"
+                           "\n\t\t\t\tdraw_light_size = 0.1f,"
+                           "\n\t\t\t\tlooped = " + Options.looped.get() + ","
+                           "\n\t\t\t\tlook_at_target = " + Options.look_to_target.get() + ","   
                            "\n\t\t\t\tsound_launch =" + '"event:/SFX/WEAPONS/WeaponFireballStart"' + ","
                            "\n\t\t\t\tstartScale = " + Entries.start_scale.get() + "f,"
                            "\n\t\t\t\ttargetScale = " + Entries.target_scale.get() + "f,"
@@ -215,7 +219,7 @@ def choose_sprite():
      # before that we will loop through each path and change all files to be 0 to n where n is number of sprites
      # as for what the texture will be named it will just be the current file path stripped done to the filename prior to it being appended
      projectile_paths.append(filepath) #loop thorugh and change the file path like we did up there at the end when we write 
-     populate_options_actions(Entries.inputProjectileId.get())
+     Options.populate_options_actions(Entries.inputProjectileId.get())
      Formatting.add_trait_to_list(Entries.inputProjectileId.get(), projectile_window)
      
 
@@ -253,38 +257,7 @@ sprite = new_button("Choose Sprite", choose_sprite)
 
 # ---------------------- OPTIONS ---------------------- #
 
-OPTIONS = [
-     "BurningEffect",
-     "SlowEffect",
-     "FrozenEffect",
-     "PoisonedEffect",
 
-]
-
-#Potentially append the action to the end of the list and use the same method as populate array to dynamically add the item to the list
-actions = [
-     "Assorted Magic"
-]
-
-options = ctk.StringVar(value="BurningEffect")
-attack_options = ctk.StringVar(value="")
-attack_actions = ctk.StringVar(value="")
-
-dropdown = ctk.CTkOptionMenu(Roots.initialFrame, values=OPTIONS, variable=options, fg_color="#203547",button_color="#203547")
-
-attack_action_dropdown = ctk.CTkOptionMenu(Roots.initialFrame, values=actions, variable=attack_actions, fg_color="#203547",button_color="#203547")
-attack_action_dropdown.grid(row=1, column=8, padx=2, pady=4)
-
-def populate_options_actions(sprite):
-     actions.append(sprite)
-     attack_action_dropdown = ctk.CTkOptionMenu(Roots.initialFrame, values=actions, variable=attack_actions, fg_color="#203547",button_color="#203547")
-     attack_action_dropdown.grid(row=1, column=8, padx=2, pady=4)
-     
-
-# ATTACK ACTION FEATURE | WIP
-def populate_options(dynamic_options):    
-    dropdown2 = ctk.CTkOptionMenu(Roots.initialFrame, values=dynamic_options, variable=attack_options, fg_color="#203547",button_color="#203547")
-    dropdown2.grid(row=0, column=8, padx=2, pady=4)
 
 
 
@@ -305,7 +278,7 @@ def format_entries():
           traits_entries.grid(row=i, column=1, padx=2, pady=4)
           length=i+1
     
-     dropdown.grid(row=length, column=1, padx=2, pady=4)
+     Options.dropdown.grid(row=length, column=1, padx=2, pady=4)
      traitCreate.grid(row=length+1, column=1, padx=2, pady=4)
      length=0 #reset length fopr next for loop
 

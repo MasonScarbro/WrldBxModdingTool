@@ -8,6 +8,7 @@ import string
 from GUI import Formatting
 from Constants import Config
 from Roots import Roots
+from Options import Options
 
 
 class Entries:
@@ -121,6 +122,10 @@ class Entries:
     start_scale.insert(0, 0.0)
     target_scale = new_entry()
     target_scale.insert(0, 0.0)
+    #T Or F "entries"
+    
+
+
 
     entryProjectilesArr = [
         inputProjectileId,
@@ -128,6 +133,8 @@ class Entries:
         terraform_range,
         start_scale,
         target_scale,
+        Options.looped_dropdown,
+        Options.look_to_target_dropdown,
     ]
 
     modName = ctk.CTkEntry(

@@ -85,8 +85,10 @@ class Formatting:
         terraformLabel = Formatting.new_label("Terraform Range: ", frame)
         startScaleLabel = Formatting.new_label("Start Scale: ", frame)
         endScaleLable = Formatting.new_label("Ending Scale: ", frame)
+        loopedLabel = Formatting.new_label("Looped (sprite): ", frame)
+        lookAtTargetLabel = Formatting.new_label("Rotate (y-axis): ", frame)
 
-        return [idLabel, speedLabel, terraformLabel, startScaleLabel, endScaleLable]
+        return [idLabel, speedLabel, terraformLabel, startScaleLabel, endScaleLable, loopedLabel, lookAtTargetLabel]
 
     def create_labels_actions(frame):
         idLabel = Formatting.new_label("Trait To Add: ", frame)
