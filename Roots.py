@@ -1,14 +1,24 @@
 from tkinter import *
 import customtkinter as ctk
 import time
-
-
+import sys
+import os
 class Roots:
     root = ctk.CTk(fg_color="#101519")
     initialFrame = ctk.CTkFrame(root, fg_color="#101519")
     WindowsFrame = ctk.CTkFrame(root, fg_color="#101519")
     writeButtonFrame = ctk.CTkFrame(root, fg_color="#101519")
     root.geometry("1800x900")
+    root.title("Masons WrldBox Modding Starter")
+
+    if getattr(sys, 'frozen', False):
+    # Running as a PyInstaller executable
+        icon_path = os.path.join(sys._MEIPASS, 'Icon.ico')
+    else:
+    # Running as a regular Python script
+        icon_path = 'Icon.ico'
+
+    root.iconbitmap(icon_path)
     initialFrame.grid(row=0, column=0, padx=4, pady=0)
     WindowsFrame.grid(row=0, column=1, padx=20, pady=0)
     writeButtonFrame.grid(row=1, column=1, padx=20, pady=0)

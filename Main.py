@@ -1,7 +1,7 @@
 from tkinter import *
 import customtkinter as ctk
 import re
-import os
+
 import numpy as np
 import array as arr
 import string
@@ -15,6 +15,8 @@ from pathlib import Path
 import shutil
 from Options import Options
 
+# Set the working directory to the directory containing Main.py
+os.chdir(os.path.dirname(__file__))
 
 
 
