@@ -123,7 +123,7 @@ class Config:
         "\t\t\tif(pTarget != null)"
         "\n\t\t\t{"
         '\n\t\t\t\tActor a = Reflection.GetField(pTarget.GetType(), pTarget, "a") as Actor;'
-        "\n\t\t\t\tif (Toolbox.randomChance(0.2f))"
+        "\n\t\t\t\tif (Toolbox.randomChance(0.8f))"
         "\n\t\t\t\t{"
         "\n\t\t\t\t\tVector2Int pos = pTile.pos; // Position of the Ptile as a Vector 2"
         "\n\t\t\t\t\tfloat pDist = Vector2.Distance(pTarget.currentPosition, pos); // the distance between the target and the pTile"
